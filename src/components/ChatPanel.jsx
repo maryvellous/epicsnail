@@ -197,6 +197,8 @@ export default function ChatPanel() {
     }
   };
 
+  const hasPendingAction = messages.some(m => m.pendingAction && m.pendingAction.status === 'pending');
+
   const executeSlashCommand = (cmd) => {
     setShowSlashMenu(false);
     if (cmd.action === 'clear') {
@@ -221,7 +223,7 @@ export default function ChatPanel() {
 
   const sendMessage = async (overrideText = null) => {
     const textToSend = overrideText || inputText;
-    if (!textToSend.trim() || isLoading) return;
+    if (!textToSend.trim() || isLoading || hasPendingAction) return;
 
     const targetThreadId = activeThreadId;
 
@@ -788,10 +790,15 @@ export default function ChatPanel() {
             )}
 
             {/* INPUT BAR WITH AUTO-EXPANDING TEXTAREA */}
-            <div className="flex items-end gap-2 bg-[#1e1333] border border-[#9D85C6]/40 focus-within:border-[#9D85C6] rounded-3xl p-2.5 shadow-2xl transition-all">
+            <div className={`flex items-end gap-2 bg-[#1e1333] border rounded-3xl p-2.5 shadow-2xl transition-all ${
+              hasPendingAction 
+                ? 'border-amber-400/60 bg-[#1e1333]/80 opacity-90' 
+                : 'border-[#9D85C6]/40 focus-within:border-[#9D85C6]'
+            }`}>
               <textarea
                 ref={textareaRef}
                 rows={1}
+                disabled={hasPendingAction || isLoading}
                 value={inputText}
                 onChange={(e) => {
                   handleInputChange(e);
@@ -805,17 +812,21 @@ export default function ChatPanel() {
                     if (textareaRef.current) textareaRef.current.style.height = 'auto';
                   }
                 }}
-                placeholder="Scrivi un messaggio o digita / per i comandi rapidi... (Invio per inviare, Shift+Invio a capo)"
-                className="flex-1 bg-transparent border-none text-white text-sm px-4 py-1 focus:outline-none placeholder-[#9D85C6]/50 font-sans resize-none overflow-y-auto max-h-40 leading-relaxed"
+                placeholder={
+                  hasPendingAction
+                    ? "Approva o annulla la richiesta di azione in sospeso prima di inviare un nuovo messaggio..."
+                    : "Scrivi un messaggio o digita / per i comandi rapidi... (Invio per inviare, Shift+Invio a capo)"
+                }
+                className="flex-1 bg-transparent border-none text-white text-sm px-4 py-1 focus:outline-none placeholder-[#9D85C6]/50 font-sans resize-none overflow-y-auto max-h-40 leading-relaxed disabled:opacity-50"
               />
               <button
                 onClick={() => {
                   sendMessage();
                   if (textareaRef.current) textareaRef.current.style.height = 'auto';
                 }}
-                disabled={!inputText.trim() || isLoading}
+                disabled={!inputText.trim() || isLoading || hasPendingAction}
                 className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all cursor-pointer shadow-md shrink-0 ${
-                  inputText.trim() && !isLoading
+                  inputText.trim() && !isLoading && !hasPendingAction
                     ? 'bg-[#6B5887] hover:bg-[#7A3F67] text-white hover:scale-105 active:scale-95 border border-white/20'
                     : 'bg-white/10 text-white/30 cursor-not-allowed'
                 }`}

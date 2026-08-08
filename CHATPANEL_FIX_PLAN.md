@@ -1,6 +1,6 @@
 # Piano di Implementazione & Log Avanzamento: Fix ChatPanel.jsx
 
-**Stato globale:** Fase 2 completata e verificata con successo
+**Stato globale:** Fasi 1, 2 e 3 completate e verificate con successo. In attesa di approvazione utente per la Fase 4.
 
 ---
 
@@ -74,9 +74,34 @@
 ---
 
 ## Fase 3 — Priorità 3: Sovrascrittura stato durante esecuzione tool (Human-in-the-Loop)
-- **Stato**: In attesa di pianificazione.
+
+### 1. Dettagli Modifica
+- **File coinvolti**:
+  - [`src/components/ChatPanel.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/ChatPanel.jsx)
+  - [`src/__tests__/ChatPanelPendingAction.test.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/__tests__/ChatPanelPendingAction.test.jsx)
+- **Funzioni/Stati interessati**:
+  - Calcolo derivato `hasPendingAction = messages.some(m => m.pendingAction && m.pendingAction.status === 'pending')`.
+  - `sendMessage()`: Blocco invio se `hasPendingAction` è vero.
+  - Input bar & Textarea: Disabilitazione ed indicazione visiva utente quando un'azione Human-in-the-Loop è in attesa di conferma.
+
+### 2. Approccio Scelto & Motivazione
+- **Approccio**: Opzione A della roadmap — Disabilitazione dell'invio di nuovi messaggi e dell'input di testo finché esiste una card con `pendingAction.status === 'pending'`.
+- **Motivazione**: È la soluzione UX più chiara ed evita la sovrascrittura di stati concorrenti dovuti alla sovrapposizione tra la risposta del nuovo messaggio e l'esito dell'azione approvata.
+
+### 3. Rischi di Regressione
+- **Rischio**: Blocco permanente dell'input se la richiesta di approvazione rimanesse bloccata in stato `'pending'`.
+  - *Esito*: Mitigato con successo. I pulsanti "Approva ed Esegui" e "Annulla" aggiornano lo stato dell'azione in `'executing'`, `'completed'`, `'cancelled'` o `'error'`, sbloccando immediatamente l'input.
+
+### 4. Risultati della Verifica
+- **`npx vitest run`**: PASS (5 test file passati, 14 test passati in totale, incluso `ChatPanelPendingAction.test.jsx`).
+- **`npm run build`**: PASS (Build completata con successo in 3.07s, zero errori).
+- **Test manuale & empirico**: PASS (Generando una card tool pending, l'input viene visivamente disabilitato ed i messaggi non possono essere inviati finché la card non viene approvata o annullata).
+
+### 5. Criteri di Completamento
+- [x] Test manuale: generare una card tool pending, verificare che l'invio di un nuovo messaggio sia bloccato finché non si approva/annulla l'azione, ed eseguire l'azione verificando che l'esito non venga perso.
+- [x] Aggiunto test automatico che simula il blocco invio con pending action (`src/__tests__/ChatPanelPendingAction.test.jsx`).
 
 ---
 
 ## Fase 4 — Refactoring strutturale (custom hooks)
-- **Stato**: In attesa di approvazione esplicita utente dopo Fasi 1-3.
+- **Stato**: In attesa di approvazione esplicita utente dopo la revisione delle Fasi 1, 2 e 3.
