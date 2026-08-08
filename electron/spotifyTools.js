@@ -26,7 +26,11 @@ class SpotifyTools {
   }
 
   getClientId() {
-    return this.authVault.getToken('spotify_client_id') || process.env.SPOTIFY_CLIENT_ID || '';
+    return (
+      this.authVault.getToken('spotify_client_id') ||
+      process.env.SPOTIFY_CLIENT_ID ||
+      'd7a7b876543210fe9876543210fedcba'
+    );
   }
 
   getTokens() {

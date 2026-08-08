@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useGamification } from '../context/GamificationContext';
 import { soundFX } from '../utils/audio';
+import { runCodeSafely } from '../utils/safeRunner';
 import {
   getRandomPuzzle,
   getBlockAccent,
@@ -193,12 +194,10 @@ export default function CodeQuestView() {
       const currentOrder = userState.blocks.map((b) => b.id).join(',');
       correct = currentOrder === puzzle.solution.join(',');
 
-      // Run code in sandbox if available
-      if (window.electronAPI?.runSandbox) {
-        const fullCode = userState.blocks.map((b) => b.code).join('\n');
-        const sandboxRes = await window.electronAPI.runSandbox(fullCode, 1500);
-        setSandboxResult(sandboxRes);
-      }
+      // Run code safely in Web Worker sandbox
+      const fullCode = userState.blocks.map((b) => b.code).join('\n');
+      const sandboxRes = await runCodeSafely(fullCode, 1500);
+      setSandboxResult(sandboxRes);
     } else if (puzzle.mode === 'fill') {
       correct = userState.selectedToken === puzzle.correctToken;
     } else if (puzzle.mode === 'bug') {

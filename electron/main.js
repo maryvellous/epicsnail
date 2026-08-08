@@ -156,12 +156,6 @@ ipcMain.handle('system:open-explorer', async (event, folderPath) => {
   return await openInExplorer(folderPath);
 });
 
-const CodeSandbox = require('./codeSandbox');
-
-ipcMain.handle('system:run-sandbox', async (event, { code, timeoutMs }) => {
-  return CodeSandbox.runJavaScript(code, timeoutMs);
-});
-
 ipcMain.handle('system:open-external', async (event, url) => {
   if (url) shell.openExternal(url);
 });

@@ -13,7 +13,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openAntigravityIDE: (folderPath) => ipcRenderer.invoke('system:open-antigravity', folderPath),
   openInExplorer: (folderPath) => ipcRenderer.invoke('system:open-explorer', folderPath),
   openExternal: (url) => ipcRenderer.invoke('system:open-external', url),
-  runSandbox: (code, timeoutMs) => ipcRenderer.invoke('system:run-sandbox', { code, timeoutMs }),
 
   // Storage
   getStoreData: () => ipcRenderer.invoke('store:get-all'),

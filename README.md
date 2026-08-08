@@ -14,7 +14,7 @@
 
 ## What is Diaspro Viboard?
 
-**Diaspro Viboard** è il **Desktop Productivity Hub Gamificato** di nuova generazione per sviluppatori e creator. Combina la gestione dei progetti locali, la sincronizzazione profonda con **Google Workspace**, un assistente **IA Multi-Provider (Diaspro AI)** contestuale, integrazioni multimediali (**Spotify, Pinterest, GitHub**) e un sistema di **Gamificazione CodeQuest** in un'unica interfaccia elegante in Dark Mode.
+**Diaspro Viboard** è il **Desktop Productivity Hub Gamificato** di nuova generazione per sviluppatori e creator. Combina la gestione dei progetti locali, la sincronizzazione profonda con **Google Workspace**, un assistente **IA Multi-Provider (Diaspro AI)** contestuale con Function Calling, integrazioni multimediali (**Spotify, Pinterest, GitHub**) e un sistema di **Gamificazione CodeQuest** in un'unica interfaccia elegante in Dark Mode.
 
 Costruito sulle fondamenta di **Electron 34**, **React 19**, **Vite 6** e **Tailwind CSS 4**, Diaspro Viboard offre un'esperienza utente reattiva, fluida e ad altissima resa estetica.
 
@@ -40,9 +40,10 @@ Crea un file `.env` a partire dal template fornito:
 ```bash
 cp .env.example .env
 ```
-Apri il file `.env` ed inserisci il tuo **Google Client ID**:
+Apri il file `.env` ed inserisci il tuo **Google Client ID** e (opzionalmente) il **Client Secret**:
 ```env
 GOOGLE_CLIENT_ID=vostro_client_id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=vostro_client_secret
 ```
 
 ### 4. Avviare in ambiente di sviluppo
@@ -50,7 +51,12 @@ GOOGLE_CLIENT_ID=vostro_client_id.apps.googleusercontent.com
 npm run dev
 ```
 
-### 5. Creare il pacchetto ed il file eseguibile (.exe)
+### 5. Eseguire la suite di test
+```bash
+npm test
+```
+
+### 6. Creare il pacchetto ed il file eseguibile (.exe)
 ```bash
 npm run dist
 ```
@@ -59,6 +65,9 @@ npm run dist
 
 ## Key Features
 
+### Onboarding Wizard & Easy Setup
+* **First-Run Guided Setup**: Wizard interattivo al primo avvio per la configurazione rapida di credenziali, chiavi API, account Google e personalizzazione del profilo.
+
 ### Google Workspace Master Hub
 * **Login 1-Click Google OAuth**: Identità master sincronizzata con avatar, profilo e permessi trasparenti.
 * **Google Tasks & Calendar Sync**: Visualizzazione dei task quotidiani e degli eventi in vista *Oggi* e nel *Calendario*, con spunta e aggiornamento in tempo reale.
@@ -66,12 +75,13 @@ npm run dist
 
 ### Diaspro AI — Multi-Provider Assistant
 * **Supporto LLM Universale**: Collega in totale sicurezza Google Gemini, Anthropic Claude, OpenAI, DeepSeek o modelli locali via Ollama.
-* **Context-Aware Assistance**: Diaspro AI legge in automatico gli eventi a calendario e i task quotidiani per rispondere in modo mirato alle priorità della giornata.
+* **Autonomous Function Calling**: Esecuzione intelligente di azioni (creazione eventi Calendar, issue GitHub, controllo player Spotify) con approvazione utente *Human-in-the-Loop* per le operazioni mutative.
+* **Context-Aware Assistance & Token Trimming**: Lettura automatica di eventi e task del giorno con ottimizzazione dinamica del contesto di memoria (`TokenTrimmer`).
 * **Secure Key Vault**: Gestione cifrata e locale delle chiavi API.
 
 ### Gamification & CodeQuest
 * **Sistema XP & Level Up**: Guadagna punti esperienza completando task, pushando commit ed eseguendo sessioni di lavoro.
-* **CodeQuest Puzzle & Challenge**: Sfide di programmazione ed enigmi interattivi integrati per allenare la logica dev.
+* **CodeQuest & JS Sandbox**: Sfide di programmazione ed enigmi interattivi integrati con esecuzione locale e sicura degli snippet JavaScript.
 * **XP Pop Notification**: Reazioni visive ed effetti dinamici al raggiungimento dei milestone.
 
 ### Media & Dev Integration Hub
@@ -96,7 +106,7 @@ graph TD
     
     subgraph Renderer Process
         C --> D[Google Workspace Service]
-        C --> E[Diaspro AI Engine]
+        C --> E[Diaspro AI Engine & Token Trimmer]
         C --> F[CodeQuest Gamification System]
         C --> G[Git & Project Manager]
         C --> H[Media Hub: Spotify / Pinterest]
@@ -115,3 +125,4 @@ graph TD
 ## License
 
 Rilasciato sotto licenza [MIT License](LICENSE).
+
