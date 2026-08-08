@@ -200,6 +200,7 @@ export default function ChatPanel() {
   const executeSlashCommand = (cmd) => {
     setShowSlashMenu(false);
     if (cmd.action === 'clear') {
+      const targetThreadId = activeThreadId;
       const cleared = [
         {
           id: `msg_${Date.now()}`,
@@ -208,7 +209,7 @@ export default function ChatPanel() {
         }
       ];
       setMessages(cleared);
-      setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: cleared } : t));
+      setThreads(prev => prev.map(t => t.id === targetThreadId ? { ...t, messages: cleared } : t));
       setInputText('');
       return;
     }
@@ -222,6 +223,8 @@ export default function ChatPanel() {
     const textToSend = overrideText || inputText;
     if (!textToSend.trim() || isLoading) return;
 
+    const targetThreadId = activeThreadId;
+
     const userMessage = {
       id: `user_${Date.now()}`,
       role: 'user',
@@ -230,7 +233,7 @@ export default function ChatPanel() {
 
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
-    setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: newMessages } : t));
+    setThreads(prev => prev.map(t => t.id === targetThreadId ? { ...t, messages: newMessages } : t));
     setInputText('');
     setShowSlashMenu(false);
     setIsLoading(true);
@@ -255,20 +258,35 @@ export default function ChatPanel() {
           pendingAction: res.pendingAction ? { ...res.pendingAction, status: 'pending' } : null
         };
         const updatedMsgs = [...newMessages, assistantMsg];
-        setMessages(updatedMsgs);
 
-        // Update active thread storage
-        setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: updatedMsgs } : t));
+        // Update target thread in threads array
+        setThreads(prev => prev.map(t => t.id === targetThreadId ? { ...t, messages: updatedMsgs } : t));
+
+        // Update active UI messages ONLY if user is still on target thread
+        setActiveThreadId(currentActive => {
+          if (currentActive === targetThreadId) {
+            setMessages(updatedMsgs);
+          }
+          return currentActive;
+        });
       } else {
         const errMsg = {
           id: `err_${Date.now()}`,
           role: 'assistant',
           content: `**Errore:** ${res.error || 'Impossibile completare la richiesta.'}`
         };
-        setMessages(prev => {
-          const updated = [...prev, errMsg];
-          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-          return updated;
+        setThreads(prev => prev.map(t => {
+          if (t.id === targetThreadId) {
+            const currentMsgs = t.messages || [];
+            return { ...t, messages: [...currentMsgs, errMsg] };
+          }
+          return t;
+        }));
+        setActiveThreadId(currentActive => {
+          if (currentActive === targetThreadId) {
+            setMessages(prev => [...prev, errMsg]);
+          }
+          return currentActive;
         });
       }
     } catch (e) {
@@ -277,10 +295,18 @@ export default function ChatPanel() {
         role: 'assistant',
         content: `**Errore di connessione:** ${e.message}`
       };
-      setMessages(prev => {
-        const updated = [...prev, connErrMsg];
-        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-        return updated;
+      setThreads(prev => prev.map(t => {
+        if (t.id === targetThreadId) {
+          const currentMsgs = t.messages || [];
+          return { ...t, messages: [...currentMsgs, connErrMsg] };
+        }
+        return t;
+      }));
+      setActiveThreadId(currentActive => {
+        if (currentActive === targetThreadId) {
+          setMessages(prev => [...prev, connErrMsg]);
+        }
+        return currentActive;
       });
     } finally {
       setIsLoading(false);
@@ -288,39 +314,71 @@ export default function ChatPanel() {
   };
 
   const handleApproveAction = async (msgId, action) => {
-    setMessages(prev => {
-      const updated = prev.map(m => {
-        if (m.id === msgId && m.pendingAction) {
-          return {
-            ...m,
-            pendingAction: { ...m.pendingAction, status: 'executing' }
-          };
-        }
-        return m;
-      });
-      setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-      return updated;
+    const targetThreadId = activeThreadId;
+
+    setThreads(prev => prev.map(t => {
+      if (t.id === targetThreadId) {
+        const updated = (t.messages || []).map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return { ...m, pendingAction: { ...m.pendingAction, status: 'executing' } };
+          }
+          return m;
+        });
+        return { ...t, messages: updated };
+      }
+      return t;
+    }));
+    setActiveThreadId(currentActive => {
+      if (currentActive === targetThreadId) {
+        setMessages(prev => prev.map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return { ...m, pendingAction: { ...m.pendingAction, status: 'executing' } };
+          }
+          return m;
+        }));
+      }
+      return currentActive;
     });
 
     try {
       const res = await window.electronAPI.executeTool(action.toolName, action.params);
       
-      setMessages(prev => {
-        const updated = prev.map(m => {
-          if (m.id === msgId && m.pendingAction) {
-            return {
-              ...m,
-              pendingAction: {
-                ...m.pendingAction,
-                status: res.success ? 'completed' : 'error',
-                result: res
-              }
-            };
-          }
-          return m;
-        });
-        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-        return updated;
+      setThreads(prev => prev.map(t => {
+        if (t.id === targetThreadId) {
+          const updated = (t.messages || []).map(m => {
+            if (m.id === msgId && m.pendingAction) {
+              return {
+                ...m,
+                pendingAction: {
+                  ...m.pendingAction,
+                  status: res.success ? 'completed' : 'error',
+                  result: res
+                }
+              };
+            }
+            return m;
+          });
+          return { ...t, messages: updated };
+        }
+        return t;
+      }));
+      setActiveThreadId(currentActive => {
+        if (currentActive === targetThreadId) {
+          setMessages(prev => prev.map(m => {
+            if (m.id === msgId && m.pendingAction) {
+              return {
+                ...m,
+                pendingAction: {
+                  ...m.pendingAction,
+                  status: res.success ? 'completed' : 'error',
+                  result: res
+                }
+              };
+            }
+            return m;
+          }));
+        }
+        return currentActive;
       });
 
       if (res.success) {
@@ -329,10 +387,17 @@ export default function ChatPanel() {
           role: 'assistant',
           content: `**Azione eseguita con successo!**\n\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
         };
-        setMessages(prev => {
-          const updated = [...prev, sysMsg];
-          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-          return updated;
+        setThreads(prev => prev.map(t => {
+          if (t.id === targetThreadId) {
+            return { ...t, messages: [...(t.messages || []), sysMsg] };
+          }
+          return t;
+        }));
+        setActiveThreadId(currentActive => {
+          if (currentActive === targetThreadId) {
+            setMessages(prev => [...prev, sysMsg]);
+          }
+          return currentActive;
         });
       } else {
         const errSysMsg = {
@@ -340,43 +405,72 @@ export default function ChatPanel() {
           role: 'assistant',
           content: `❌ **Errore durante l'esecuzione dell'azione:** ${res.error}`
         };
-        setMessages(prev => {
-          const updated = [...prev, errSysMsg];
-          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-          return updated;
+        setThreads(prev => prev.map(t => {
+          if (t.id === targetThreadId) {
+            return { ...t, messages: [...(t.messages || []), errSysMsg] };
+          }
+          return t;
+        }));
+        setActiveThreadId(currentActive => {
+          if (currentActive === targetThreadId) {
+            setMessages(prev => [...prev, errSysMsg]);
+          }
+          return currentActive;
         });
       }
     } catch (err) {
       const catchErrMsg = { error: err.message };
-      setMessages(prev => {
-        const updated = prev.map(m => {
-          if (m.id === msgId && m.pendingAction) {
-            return {
-              ...m,
-              pendingAction: { ...m.pendingAction, status: 'error', result: catchErrMsg }
-            };
-          }
-          return m;
-        });
-        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-        return updated;
+      setThreads(prev => prev.map(t => {
+        if (t.id === targetThreadId) {
+          const updated = (t.messages || []).map(m => {
+            if (m.id === msgId && m.pendingAction) {
+              return { ...m, pendingAction: { ...m.pendingAction, status: 'error', result: catchErrMsg } };
+            }
+            return m;
+          });
+          return { ...t, messages: updated };
+        }
+        return t;
+      }));
+      setActiveThreadId(currentActive => {
+        if (currentActive === targetThreadId) {
+          setMessages(prev => prev.map(m => {
+            if (m.id === msgId && m.pendingAction) {
+              return { ...m, pendingAction: { ...m.pendingAction, status: 'error', result: catchErrMsg } };
+            }
+            return m;
+          }));
+        }
+        return currentActive;
       });
     }
   };
 
   const handleCancelAction = (msgId) => {
-    setMessages(prev => {
-      const updated = prev.map(m => {
-        if (m.id === msgId && m.pendingAction) {
-          return {
-            ...m,
-            pendingAction: { ...m.pendingAction, status: 'cancelled' }
-          };
-        }
-        return m;
-      });
-      setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
-      return updated;
+    const targetThreadId = activeThreadId;
+
+    setThreads(prev => prev.map(t => {
+      if (t.id === targetThreadId) {
+        const updated = (t.messages || []).map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return { ...m, pendingAction: { ...m.pendingAction, status: 'cancelled' } };
+          }
+          return m;
+        });
+        return { ...t, messages: updated };
+      }
+      return t;
+    }));
+    setActiveThreadId(currentActive => {
+      if (currentActive === targetThreadId) {
+        setMessages(prev => prev.map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return { ...m, pendingAction: { ...m.pendingAction, status: 'cancelled' } };
+          }
+          return m;
+        }));
+      }
+      return currentActive;
     });
   };
 

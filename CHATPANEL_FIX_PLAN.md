@@ -1,6 +1,6 @@
 # Piano di Implementazione & Log Avanzamento: Fix ChatPanel.jsx
 
-**Stato globale:** Fase 1 completata e verificata con successo
+**Stato globale:** Fase 2 completata e verificata con successo
 
 ---
 
@@ -32,13 +32,9 @@
   - *Esito*: Mitigato leggendo i messaggi salvati nel thread attivo iniziale (`store.chatThreads`) durante l'inizializzazione.
 
 ### 4. Risultati della Verifica
-- **`npx vitest run`**:
-  - **Esito**: PASS (3 test file passati, 11 test passati in totale, inclusi i test unitari su `ChatPanelPersistence.test.jsx`).
-- **`npm run build`**:
-  - **Esito**: PASS (Build completata con successo in 3.70s, nessun errore).
-- **Test manuale & empirico**:
-  - **Invio messaggio & cambio thread**: Il messaggio viene salvato in `threads` e persiste tornando al thread originario.
-  - **Riavvio app**: Al montaggio di `ChatPanel`, `getStoreData()` restituisce l'array `chatThreads` da `diaspro_store.json`, `isLoaded` diventa `true` e i messaggi scambiati vengono ripristinati correttamente nell'interfaccia.
+- **`npx vitest run`**: PASS (3 test file passati, 11 test passati in totale).
+- **`npm run build`**: PASS (Build completata con successo in 3.70s, zero errori).
+- **Test manuale & empirico**: PASS (Messaggi salvati in `chatThreads` e ripristinati al riavvio).
 
 ### 5. Criteri di Completamento
 - [x] Ripetere il test manuale: il messaggio persiste dopo cambio thread e riavvio dell'app.
@@ -47,12 +43,38 @@
 ---
 
 ## Fase 2 — Priorità 2: Race condition su cambio thread
-- **Stato**: In attesa di approvazione della Fase 1.
+
+### 1. Dettagli Modifica
+- **File coinvolti**:
+  - [`src/components/ChatPanel.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/ChatPanel.jsx)
+  - [`src/__tests__/ChatPanelThreadRace.test.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/__tests__/ChatPanelThreadRace.test.jsx)
+- **Funzioni/Stati interessati**:
+  - `sendMessage()`, `handleApproveAction()`, `handleCancelAction()`.
+  - Cattura esplicita di `targetThreadId = activeThreadId` al momento dell'avvio della chiamata asincrona.
+  - Aggiornamento mirato dell'array `threads` per `targetThreadId` indipendentemente dal thread attualmente visualizzato.
+  - Condizionamento dell'aggiornamento dello stato `messages` visibile a schermo unicamente se `activeThreadId` coincide ancora con `targetThreadId`.
+
+### 2. Approccio Scelto & Motivazione
+- **Approccio**: Closure del `targetThreadId` all'inizio dell'azione + aggiornamento condizionale della vista principale.
+- **Motivazione**: Se l'utente cambia thread mentre l'IA sta rispondendo, la risposta dell'IA deve comunque essere salvata in background nel thread di origine (così quando l'utente torna su quel thread trova la risposta pronta), ma NON deve inquinare né la vista corrente né l'array dei messaggi del nuovo thread attivo.
+
+### 3. Rischi di Regressione
+- **Rischio**: Se l'utente torna al thread originario prima che la chiamata asincrona finisca, l'aggiornamento a schermo della risposta deve avvenire correttamente senza rimanere bloccato.
+  - *Esito*: Verificato con successo tramite check funzionale `setActiveThreadId(currentActive => { if (currentActive === targetThreadId) setMessages(...); return currentActive; })`.
+
+### 4. Risultati della Verifica
+- **`npx vitest run`**: PASS (4 test file passati, 12 test passati in totale, incluso `ChatPanelThreadRace.test.jsx`).
+- **`npm run build`**: PASS (Build completata con successo in 3.17s, zero errori).
+- **Test manuale & empirico**: PASS (Inviando un messaggio e cambiando subito thread, la risposta viene immagazzinata nel thread di origine e la vista del nuovo thread rimane incontaminata).
+
+### 5. Criteri di Completamento
+- [x] Test manuale: inviare un messaggio, cambiare thread immediatamente prima che arrivi la risposta, verificare che la risposta compaia nel thread corretto (quello originale) e non in quello attivo.
+- [x] Aggiunto test automatico che simula lo scenario di cambio thread asincrono (`src/__tests__/ChatPanelThreadRace.test.jsx`).
 
 ---
 
 ## Fase 3 — Priorità 3: Sovrascrittura stato durante esecuzione tool (Human-in-the-Loop)
-- **Stato**: In attesa di completamento della Fase 2.
+- **Stato**: In attesa di pianificazione.
 
 ---
 
