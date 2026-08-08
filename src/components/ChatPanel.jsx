@@ -60,6 +60,7 @@ export default function ChatPanel() {
     { id: 't_current', title: 'Conversazione Corrente', messages: [], archived: false, date: 'Oggi' },
   ]);
   const [activeThreadId, setActiveThreadId] = useState('t_current');
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Slash menu UI
   const [showSlashMenu, setShowSlashMenu] = useState(false);
@@ -86,9 +87,18 @@ export default function ChatPanel() {
           const defaultTier = PROVIDER_TIERS[store.selectedProvider]?.[0]?.id;
           if (defaultTier) setActiveTier(defaultTier);
         }
-        if (store?.chatThreads) {
+        if (store?.chatThreads && Array.isArray(store.chatThreads) && store.chatThreads.length > 0) {
           setThreads(store.chatThreads);
+          // Restore messages of initial active thread if available
+          const initialThread = store.chatThreads.find(t => t.id === 't_current') || store.chatThreads[0];
+          if (initialThread && initialThread.messages && initialThread.messages.length > 0) {
+            setMessages(initialThread.messages);
+            setActiveThreadId(initialThread.id);
+          }
         }
+        setIsLoaded(true);
+      }).catch(() => {
+        setIsLoaded(true);
       });
 
       window.electronAPI.getContextHeader().then(header => {
@@ -99,8 +109,17 @@ export default function ChatPanel() {
           if (matched) setActiveContextProjectId(matched.id);
         }
       });
+    } else {
+      setIsLoaded(true);
     }
   }, []);
+
+  // Persist threads to disk whenever threads state updates after initial load
+  useEffect(() => {
+    if (isLoaded && window.electronAPI) {
+      window.electronAPI.setStoreData('chatThreads', threads);
+    }
+  }, [threads, isLoaded]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -189,6 +208,7 @@ export default function ChatPanel() {
         }
       ];
       setMessages(cleared);
+      setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: cleared } : t));
       setInputText('');
       return;
     }
@@ -210,6 +230,7 @@ export default function ChatPanel() {
 
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
+    setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: newMessages } : t));
     setInputText('');
     setShowSlashMenu(false);
     setIsLoading(true);
@@ -239,99 +260,124 @@ export default function ChatPanel() {
         // Update active thread storage
         setThreads(prev => prev.map(t => t.id === activeThreadId ? { ...t, messages: updatedMsgs } : t));
       } else {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `err_${Date.now()}`,
-            role: 'assistant',
-            content: `**Errore:** ${res.error || 'Impossibile completare la richiesta.'}`
-          }
-        ]);
-      }
-    } catch (e) {
-      setMessages(prev => [
-        ...prev,
-        {
+        const errMsg = {
           id: `err_${Date.now()}`,
           role: 'assistant',
-          content: `**Errore di connessione:** ${e.message}`
-        }
-      ]);
+          content: `**Errore:** ${res.error || 'Impossibile completare la richiesta.'}`
+        };
+        setMessages(prev => {
+          const updated = [...prev, errMsg];
+          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+          return updated;
+        });
+      }
+    } catch (e) {
+      const connErrMsg = {
+        id: `err_${Date.now()}`,
+        role: 'assistant',
+        content: `**Errore di connessione:** ${e.message}`
+      };
+      setMessages(prev => {
+        const updated = [...prev, connErrMsg];
+        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+        return updated;
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleApproveAction = async (msgId, action) => {
-    setMessages(prev => prev.map(m => {
-      if (m.id === msgId && m.pendingAction) {
-        return {
-          ...m,
-          pendingAction: { ...m.pendingAction, status: 'executing' }
-        };
-      }
-      return m;
-    }));
+    setMessages(prev => {
+      const updated = prev.map(m => {
+        if (m.id === msgId && m.pendingAction) {
+          return {
+            ...m,
+            pendingAction: { ...m.pendingAction, status: 'executing' }
+          };
+        }
+        return m;
+      });
+      setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+      return updated;
+    });
 
     try {
       const res = await window.electronAPI.executeTool(action.toolName, action.params);
       
-      setMessages(prev => prev.map(m => {
-        if (m.id === msgId && m.pendingAction) {
-          return {
-            ...m,
-            pendingAction: {
-              ...m.pendingAction,
-              status: res.success ? 'completed' : 'error',
-              result: res
-            }
-          };
-        }
-        return m;
-      }));
+      setMessages(prev => {
+        const updated = prev.map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return {
+              ...m,
+              pendingAction: {
+                ...m.pendingAction,
+                status: res.success ? 'completed' : 'error',
+                result: res
+              }
+            };
+          }
+          return m;
+        });
+        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+        return updated;
+      });
 
       if (res.success) {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `sys_${Date.now()}`,
-            role: 'assistant',
-            content: `**Azione eseguita con successo!**\n\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
-          }
-        ]);
+        const sysMsg = {
+          id: `sys_${Date.now()}`,
+          role: 'assistant',
+          content: `**Azione eseguita con successo!**\n\`\`\`json\n${JSON.stringify(res, null, 2)}\n\`\`\``
+        };
+        setMessages(prev => {
+          const updated = [...prev, sysMsg];
+          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+          return updated;
+        });
       } else {
-        setMessages(prev => [
-          ...prev,
-          {
-            id: `sys_${Date.now()}`,
-            role: 'assistant',
-            content: `❌ **Errore durante l'esecuzione dell'azione:** ${res.error}`
-          }
-        ]);
+        const errSysMsg = {
+          id: `sys_${Date.now()}`,
+          role: 'assistant',
+          content: `❌ **Errore durante l'esecuzione dell'azione:** ${res.error}`
+        };
+        setMessages(prev => {
+          const updated = [...prev, errSysMsg];
+          setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+          return updated;
+        });
       }
     } catch (err) {
-      setMessages(prev => prev.map(m => {
-        if (m.id === msgId && m.pendingAction) {
-          return {
-            ...m,
-            pendingAction: { ...m.pendingAction, status: 'error', result: { error: err.message } }
-          };
-        }
-        return m;
-      }));
+      const catchErrMsg = { error: err.message };
+      setMessages(prev => {
+        const updated = prev.map(m => {
+          if (m.id === msgId && m.pendingAction) {
+            return {
+              ...m,
+              pendingAction: { ...m.pendingAction, status: 'error', result: catchErrMsg }
+            };
+          }
+          return m;
+        });
+        setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+        return updated;
+      });
     }
   };
 
   const handleCancelAction = (msgId) => {
-    setMessages(prev => prev.map(m => {
-      if (m.id === msgId && m.pendingAction) {
-        return {
-          ...m,
-          pendingAction: { ...m.pendingAction, status: 'cancelled' }
-        };
-      }
-      return m;
-    }));
+    setMessages(prev => {
+      const updated = prev.map(m => {
+        if (m.id === msgId && m.pendingAction) {
+          return {
+            ...m,
+            pendingAction: { ...m.pendingAction, status: 'cancelled' }
+          };
+        }
+        return m;
+      });
+      setThreads(tPrev => tPrev.map(t => t.id === activeThreadId ? { ...t, messages: updated } : t));
+      return updated;
+    });
   };
 
   const handleSaveContext = async () => {
