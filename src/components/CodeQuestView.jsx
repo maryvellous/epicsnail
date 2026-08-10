@@ -228,7 +228,7 @@ export default function CodeQuestView() {
         particleCount: 70,
         spread: 60,
         origin: { y: 0.5 },
-        colors: ['#9D85C6', '#E8D19E', '#A5C4DC', '#98A78A', '#BC957D', '#7A3F67'],
+        colors: ['#9a85c0', '#efdebd', '#a8c6de', '#9ca98b', '#785076', '#833d6f'],
         scalar: 0.8,
       });
 
@@ -295,10 +295,10 @@ export default function CodeQuestView() {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 16, zIndex: 5 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 26, fontWeight: 900, color: '#E8D19E', letterSpacing: '-0.5px', margin: 0 }}>
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: 26, fontWeight: 900, color: '#efdebd', letterSpacing: '-0.5px', margin: 0 }}>
               CodeQuest
             </h1>
-            <span className="badge-pill" style={{ background: '#7A3F67', color: '#fff' }}>
+            <span className="badge-pill" style={{ background: '#833d6f', color: '#fff' }}>
               Fidget Arcade
             </span>
           </div>
@@ -310,14 +310,14 @@ export default function CodeQuestView() {
         {/* Stats Chips */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           {streak >= 2 && (
-            <div style={{ background: 'rgba(232,209,158,0.15)', border: '1px solid #E8D19E', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 800, color: '#E8D19E' }}>
+            <div style={{ background: 'rgba(239,222,189,0.15)', border: '1px solid #efdebd', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-heading)', fontSize: 11, fontWeight: 800, color: '#efdebd' }}>
               STREAK x{streak}
             </div>
           )}
-          <div style={{ background: 'rgba(157,133,198,0.15)', border: '1px solid #9D85C6', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#9D85C6' }}>
+          <div style={{ background: 'rgba(154,133,192,0.15)', border: '1px solid #9a85c0', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#9a85c0' }}>
             +{sessionXP} XP
           </div>
-          <div style={{ background: 'rgba(152,167,138,0.15)', border: '1px solid #98A78A', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#98A78A' }}>
+          <div style={{ background: 'rgba(156,169,139,0.15)', border: '1px solid #9ca98b', borderRadius: 9999, padding: '4px 12px', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#9ca98b' }}>
             {sessionSolved} Risolti
           </div>
         </div>
@@ -329,7 +329,7 @@ export default function CodeQuestView() {
           onClick={() => handleModeSelect('all')}
           className="action-pill"
           style={{
-            background: selectedMode === 'all' ? 'linear-gradient(135deg, #7A3F67, #9D85C6)' : 'rgba(255,255,255,0.06)',
+            background: selectedMode === 'all' ? 'linear-gradient(135deg, #833d6f, #9a85c0)' : 'rgba(255,255,255,0.06)',
             color: selectedMode === 'all' ? '#fff' : 'rgba(255,255,255,0.6)',
             border: selectedMode === 'all' ? 'none' : '1px solid rgba(255,255,255,0.12)',
             padding: '7px 16px', fontSize: 12,
@@ -369,14 +369,14 @@ export default function CodeQuestView() {
         {showXpPop && (
           <div style={{
             position: 'absolute', top: -32, right: 24, fontFamily: 'var(--font-heading)',
-            fontSize: 16, fontWeight: 900, color: '#E8D19E', animation: 'cq-xpPop 1.8s ease forwards',
-            pointerEvents: 'none', zIndex: 20, textShadow: '0 2px 14px rgba(232,209,158,0.7)',
+            fontSize: 16, fontWeight: 900, color: '#efdebd', animation: 'cq-xpPop 1.8s ease forwards',
+            pointerEvents: 'none', zIndex: 20, textShadow: '0 2px 14px rgba(239,222,189,0.7)',
           }}>
             +{puzzle.xpReward} XP!
           </div>
         )}
 
-        <div className="dashboard-card" style={{ background: '#2b1c47', border: `1.5px solid ${modeMeta.color}40`, position: 'relative', overflow: 'hidden' }}>
+        <div className="dashboard-card" style={{ background: '#5c2a5c', border: `1.5px solid ${modeMeta.color}40`, position: 'relative', overflow: 'hidden' }}>
           
           {/* Header Badges */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 18, flexWrap: 'wrap' }}>
@@ -389,7 +389,7 @@ export default function CodeQuestView() {
             <span className="badge-pill" style={{ background: `${diffColor}20`, color: diffColor, border: `1px solid ${diffColor}45` }}>
               {DIFFICULTY_LABELS[puzzle.difficulty]}
             </span>
-            <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#E8D19E' }}>
+            <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#efdebd' }}>
               +{puzzle.xpReward} XP
             </span>
           </div>
@@ -406,9 +406,9 @@ export default function CodeQuestView() {
 
           {/* ── MODE 1: SORT (LINE REORDERING) ──────────────────────────────── */}
           {puzzle.mode === 'sort' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 22, padding: 14, borderRadius: 18, background: 'rgba(0,0,0,0.25)', border: '1px dashed rgba(157,133,198,0.25)' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 22, padding: 14, borderRadius: 18, background: 'rgba(0,0,0,0.25)', border: '1px dashed rgba(154,133,192,0.25)' }}>
               {userState.blocks.map((block, idx) => {
-                const accent = ACCENT_COLORS[getBlockAccent(block.code)] || '#9D85C6';
+                const accent = ACCENT_COLORS[getBlockAccent(block.code)] || '#9a85c0';
                 const isDragging = dragIdx === idx;
                 const isOver = dragOver === idx;
 
@@ -425,7 +425,7 @@ export default function CodeQuestView() {
                       onDragEnd={handleDragEnd}
                       style={{
                         display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 12,
-                        background: submitted && isCorrect ? 'rgba(152,167,138,0.15)' : submitted && !isCorrect ? 'rgba(143,90,90,0.15)' : isDragging ? 'rgba(157,133,198,0.15)' : 'rgba(24,14,46,0.85)',
+                        background: submitted && isCorrect ? 'rgba(156,169,139,0.15)' : submitted && !isCorrect ? 'rgba(143,90,90,0.15)' : isDragging ? 'rgba(154,133,192,0.15)' : 'rgba(30,19,51,0.85)',
                         border: isDragging ? `2px solid ${modeMeta.color}` : `1px solid rgba(255,255,255,0.08)`,
                         borderLeft: `4px solid ${accent}`,
                         cursor: submitted ? 'default' : 'grab', opacity: isDragging ? 0.45 : 1,
@@ -437,7 +437,7 @@ export default function CodeQuestView() {
                       <div style={{ width: 22, height: 22, borderRadius: 6, background: `${accent}20`, border: `1px solid ${accent}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-code)', fontSize: 10, fontWeight: 700, color: accent }}>
                         {idx + 1}
                       </div>
-                      <code style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: '#e8e0f0', paddingLeft: block.indent * 18, flex: 1, whiteSpace: 'pre' }}>
+                      <code style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: '#efdebd', paddingLeft: block.indent * 18, flex: 1, whiteSpace: 'pre' }}>
                         {block.code}
                       </code>
                     </div>
@@ -451,17 +451,17 @@ export default function CodeQuestView() {
           {puzzle.mode === 'fill' && (
             <div style={{ marginBottom: 24 }}>
               {/* Code snippet with ??? slot */}
-              <div style={{ padding: 18, borderRadius: 16, background: 'rgba(15,8,30,0.85)', border: '1px solid rgba(157,133,198,0.3)', marginBottom: 20 }}>
+              <div style={{ padding: 18, borderRadius: 16, background: 'rgba(30,19,51,0.85)', border: '1px solid rgba(154,133,192,0.3)', marginBottom: 20 }}>
                 {puzzle.codeLines.map((line, idx) => (
-                  <div key={idx} style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: '#e8e0f0', lineHeight: 1.8 }}>
+                  <div key={idx} style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: '#efdebd', lineHeight: 1.8 }}>
                     {line.includes('???') ? (
                       <span>
                         {line.split('???')[0]}
                         <span style={{
                           display: 'inline-block', padding: '2px 14px', borderRadius: 8,
-                          background: userState.selectedToken ? `${ACCENT_COLORS.sand}25` : 'rgba(232,209,158,0.15)',
-                          border: `1.5px dashed ${userState.selectedToken ? '#E8D19E' : 'rgba(232,209,158,0.5)'}`,
-                          color: userState.selectedToken ? '#E8D19E' : 'rgba(255,255,255,0.4)',
+                          background: userState.selectedToken ? `${ACCENT_COLORS.sand}25` : 'rgba(239,222,189,0.15)',
+                          border: `1.5px dashed ${userState.selectedToken ? '#efdebd' : 'rgba(239,222,189,0.5)'}`,
+                          color: userState.selectedToken ? '#efdebd' : 'rgba(255,255,255,0.4)',
                           fontWeight: 700, margin: '0 4px', transition: 'all 0.2s ease',
                         }}>
                           {userState.selectedToken || '???'}
@@ -489,12 +489,12 @@ export default function CodeQuestView() {
                       }}
                       className="action-pill"
                       style={{
-                        background: isSelected ? 'linear-gradient(135deg, #E8D19E, #BC957D)' : 'rgba(255,255,255,0.08)',
+                        background: isSelected ? 'linear-gradient(135deg, #efdebd, #785076)' : 'rgba(255,255,255,0.08)',
                         color: isSelected ? '#1e1333' : '#fff',
                         border: isSelected ? 'none' : '1px solid rgba(255,255,255,0.15)',
                         fontSize: 13, fontWeight: 700, padding: '10px 20px',
                         transform: isSelected ? 'scale(1.05)' : 'scale(1)',
-                        boxShadow: isSelected ? '0 4px 18px rgba(232,209,158,0.35)' : 'none',
+                        boxShadow: isSelected ? '0 4px 18px rgba(239,222,189,0.35)' : 'none',
                       }}
                     >
                       {optionToken}
@@ -520,20 +520,20 @@ export default function CodeQuestView() {
                     }}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 14,
-                      background: isSelected ? 'rgba(143,90,90,0.22)' : 'rgba(20,10,38,0.8)',
-                      border: isSelected ? '2px solid #8F5A5A' : '1px solid rgba(255,255,255,0.08)',
+                      background: isSelected ? 'rgba(143,90,90,0.22)' : 'rgba(30,19,51,0.8)',
+                      border: isSelected ? '2px solid #8f5a5a' : '1px solid rgba(255,255,255,0.08)',
                       cursor: submitted ? 'default' : 'pointer', transition: 'all 0.2s ease',
                       animation: isSelected ? 'cq-zapBug 0.4s ease' : 'none',
                     }}
                   >
-                    <div style={{ width: 24, height: 24, borderRadius: 8, background: isSelected ? '#8F5A5A' : 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#fff' }}>
+                    <div style={{ width: 24, height: 24, borderRadius: 8, background: isSelected ? '#8f5a5a' : 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-code)', fontSize: 11, fontWeight: 700, color: '#fff' }}>
                       {idx + 1}
                     </div>
-                    <code style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: isSelected ? '#f4a0a0' : '#e8e0f0', flex: 1 }}>
+                    <code style={{ fontFamily: 'var(--font-code)', fontSize: 13, color: isSelected ? '#efdebd' : '#efdebd', flex: 1 }}>
                       {line.code}
                     </code>
                     {isSelected && (
-                      <span className="badge-pill" style={{ background: '#8F5A5A', color: '#fff', fontSize: 10 }}>
+                      <span className="badge-pill" style={{ background: '#8f5a5a', color: '#fff', fontSize: 10 }}>
                         Target Bug
                       </span>
                     )}
@@ -563,12 +563,12 @@ export default function CodeQuestView() {
                       }}
                       style={{
                         padding: '12px 14px', borderRadius: 12,
-                        background: isActive ? 'rgba(152,167,138,0.25)' : matchedObj ? 'rgba(152,167,138,0.12)' : 'rgba(20,10,38,0.85)',
-                        border: isActive ? '2px solid #98A78A' : matchedObj ? '1px solid #98A78A' : '1px solid rgba(255,255,255,0.08)',
+                        background: isActive ? 'rgba(156,169,139,0.25)' : matchedObj ? 'rgba(156,169,139,0.12)' : 'rgba(30,19,51,0.85)',
+                        border: isActive ? '2px solid #9ca98b' : matchedObj ? '1px solid #9ca98b' : '1px solid rgba(255,255,255,0.08)',
                         cursor: submitted ? 'default' : 'pointer', transition: 'all 0.2s ease',
                       }}
                     >
-                      <code style={{ fontFamily: 'var(--font-code)', fontSize: 12, color: '#98A78A', fontWeight: 700 }}>
+                      <code style={{ fontFamily: 'var(--font-code)', fontSize: 12, color: '#9ca98b', fontWeight: 700 }}>
                         {pair.left}
                       </code>
                       {matchedObj && (
@@ -603,10 +603,10 @@ export default function CodeQuestView() {
                       }}
                       style={{
                         padding: '12px 14px', borderRadius: 12,
-                        background: isAssigned ? 'rgba(157,133,198,0.15)' : userState.activeLeft !== null ? 'rgba(232,209,158,0.15)' : 'rgba(20,10,38,0.85)',
-                        border: isAssigned ? '1px solid #9D85C6' : userState.activeLeft !== null ? '1px dashed #E8D19E' : '1px solid rgba(255,255,255,0.08)',
+                        background: isAssigned ? 'rgba(154,133,192,0.15)' : userState.activeLeft !== null ? 'rgba(239,222,189,0.15)' : 'rgba(30,19,51,0.85)',
+                        border: isAssigned ? '1px solid #9a85c0' : userState.activeLeft !== null ? '1px dashed #efdebd' : '1px solid rgba(255,255,255,0.08)',
                         cursor: userState.activeLeft !== null && !submitted ? 'pointer' : 'default',
-                        transition: 'all 0.2s ease', fontFamily: 'var(--font-body)', fontSize: 12, color: '#e8e0f0',
+                        transition: 'all 0.2s ease', fontFamily: 'var(--font-body)', fontSize: 12, color: '#efdebd',
                       }}
                     >
                       {rightObj.text}
@@ -631,7 +631,7 @@ export default function CodeQuestView() {
                       setRevealedHints((h) => h + 1);
                     }}
                     className="action-pill"
-                    style={{ background: 'rgba(188,149,125,0.15)', color: '#BC957D', border: '1px solid rgba(188,149,125,0.3)', fontSize: 11, padding: '5px 12px' }}
+                    style={{ background: 'rgba(120,80,118,0.15)', color: '#785076', border: '1px solid rgba(120,80,118,0.3)', fontSize: 11, padding: '5px 12px' }}
                   >
                     Suggerimento {revealedHints + 1}/{puzzle.hints.length}
                   </button>
@@ -640,7 +640,7 @@ export default function CodeQuestView() {
               {revealedHints > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
                   {puzzle.hints.slice(0, revealedHints).map((hint, i) => (
-                    <div key={i} style={{ padding: '8px 12px', borderRadius: 10, background: 'rgba(188,149,125,0.08)', border: '1px solid rgba(188,149,125,0.2)', fontFamily: 'var(--font-body)', fontSize: 12, color: '#BC957D' }}>
+                    <div key={i} style={{ padding: '8px 12px', borderRadius: 10, background: 'rgba(120,80,118,0.08)', border: '1px solid rgba(120,80,118,0.2)', fontFamily: 'var(--font-body)', fontSize: 12, color: '#785076' }}>
                       {hint}
                     </div>
                   ))}
@@ -653,11 +653,11 @@ export default function CodeQuestView() {
           {submitted && (
             <div style={{
               padding: '16px 20px', borderRadius: 14,
-              background: isCorrect ? 'rgba(152,167,138,0.12)' : 'rgba(143,90,90,0.12)',
-              border: `1px solid ${isCorrect ? '#98A78A' : '#8F5A5A'}`, marginBottom: 20,
+              background: isCorrect ? 'rgba(156,169,139,0.12)' : 'rgba(143,90,90,0.12)',
+              border: `1px solid ${isCorrect ? '#9ca98b' : '#8f5a5a'}`, marginBottom: 20,
               animation: 'cq-result 0.35s ease both',
             }}>
-              <div style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 800, color: isCorrect ? '#98A78A' : '#8F5A5A', marginBottom: 6 }}>
+              <div style={{ fontFamily: 'var(--font-heading)', fontSize: 15, fontWeight: 800, color: isCorrect ? '#9ca98b' : '#8f5a5a', marginBottom: 6 }}>
                 {isCorrect ? 'Ottimo Lavoro!' : 'Non ancora...'}
               </div>
               <p style={{ fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, margin: 0 }}>
@@ -673,8 +673,8 @@ export default function CodeQuestView() {
                 onClick={handleSubmit}
                 className="action-pill"
                 style={{
-                  background: 'linear-gradient(135deg, #7A3F67, #9D85C6)', color: '#fff', border: 'none',
-                  fontSize: 13, fontWeight: 900, padding: '10px 28px', boxShadow: '0 4px 20px rgba(122,63,103,0.45)', marginLeft: 'auto',
+                  background: 'linear-gradient(135deg, #833d6f, #9a85c0)', color: '#fff', border: 'none',
+                  fontSize: 13, fontWeight: 900, padding: '10px 28px', boxShadow: '0 4px 20px rgba(131,61,111,0.45)', marginLeft: 'auto',
                 }}
               >
                 Verifica Soluzione
@@ -698,7 +698,7 @@ export default function CodeQuestView() {
                   onClick={() => loadNextPuzzle()}
                   className="action-pill"
                   style={{
-                    background: isCorrect ? 'linear-gradient(135deg, #5d7a52, #98A78A)' : 'linear-gradient(135deg, #7A3F67, #9D85C6)',
+                    background: isCorrect ? 'linear-gradient(135deg, #9ca98b, #9ca98b)' : 'linear-gradient(135deg, #833d6f, #9a85c0)',
                     color: '#fff', border: 'none', fontSize: 13, fontWeight: 900, padding: '10px 26px',
                   }}
                 >

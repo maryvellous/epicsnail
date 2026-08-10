@@ -55,19 +55,19 @@ export default function ProjectDetailModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-md animate-fadeIn select-none">
-      <div className="w-full max-w-3xl max-h-[85vh] dashboard-card bg-[#1e1333] text-white flex flex-col overflow-hidden shadow-2xl border-white/20">
+      <div className="w-full max-w-3xl max-h-[85vh] dashboard-card bg-card text-white flex flex-col overflow-hidden shadow-2xl border-white/20">
         {/* Modal Header */}
         <div className="p-6 border-b border-white/15 flex items-center justify-between bg-black/20">
           <div>
             <h2 className="font-heading font-black text-2xl text-white flex items-center gap-3">
               {customName}
-              <span className="badge-pill bg-[#1e1333] text-[#A5C4DC] border border-[#A5C4DC]/40">
+              <span className="badge-pill bg-canvas text-blue border border-blue/40">
                 {activeProject.branch}
               </span>
             </h2>
-            <p className="text-xs font-mono text-[#A5C4DC] mt-1 break-all">{activeProject.path}</p>
+            <p className="text-xs font-mono text-blue mt-1 break-all">{activeProject.path}</p>
             {formattedModDate && (
-              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[#A5C4DC]/80 mt-1.5">
+              <div className="flex items-center gap-1.5 text-[11px] font-semibold text-blue/80 mt-1.5">
                 <Clock className="w-3.5 h-3.5 shrink-0 opacity-80" />
                 <span>{formattedModDate}</span>
               </div>
@@ -80,33 +80,33 @@ export default function ProjectDetailModal() {
               <button
                 onClick={() => launchTerminal(activeProject.path)}
                 title="Apri Terminale"
-                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#9D85C6] hover:text-white transition-all"
+                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-lavender hover:text-white transition-all"
               >
-                <Terminal className="w-4 h-4 text-[#9D85C6]" />
+                <Terminal className="w-4 h-4 text-lavender" />
               </button>
 
               <button
                 onClick={() => launchAndroidStudio(activeProject.path)}
                 title="Apri in Android Studio"
-                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#98A78A] hover:text-white transition-all"
+                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-sage hover:text-white transition-all"
               >
-                <Smartphone className="w-4 h-4 text-[#98A78A]" />
+                <Smartphone className="w-4 h-4 text-sage" />
               </button>
 
               <button
                 onClick={() => launchAntigravityIDE(activeProject.path)}
                 title="Apri in Antigravity IDE"
-                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#A5C4DC] hover:text-white transition-all"
+                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-blue hover:text-white transition-all"
               >
-                <Sparkles className="w-4 h-4 text-[#A5C4DC]" />
+                <Sparkles className="w-4 h-4 text-blue" />
               </button>
 
               <button
                 onClick={() => launchVSCode(activeProject.path)}
                 title="Apri in VS Code"
-                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-[#9D85C6] hover:text-white transition-all"
+                className="p-2.5 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-lavender hover:text-white transition-all"
               >
-                <Code2 className="w-4 h-4 text-[#9D85C6]" />
+                <Code2 className="w-4 h-4 text-lavender" />
               </button>
             </div>
 
@@ -125,7 +125,7 @@ export default function ProjectDetailModal() {
             onClick={() => setActiveTab('tasks')}
             className={`action-pill ${
               activeTab === 'tasks'
-                ? 'bg-[#E8D19E] text-[#1e1333] font-black'
+                ? 'bg-sand text-canvas font-black'
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`}
           >
@@ -137,7 +137,7 @@ export default function ProjectDetailModal() {
             onClick={() => setActiveTab('notes')}
             className={`action-pill ${
               activeTab === 'notes'
-                ? 'bg-[#E8D19E] text-[#1e1333] font-black'
+                ? 'bg-sand text-canvas font-black'
                 : 'bg-white/10 text-white hover:bg-white/20'
             }`}
           >
@@ -156,11 +156,11 @@ export default function ProjectDetailModal() {
                   placeholder="Nuova task..."
                   value={newTaskTitle}
                   onChange={(e) => setNewTaskTitle(e.target.value)}
-                  className="flex-1 bg-[#1e1333] border border-white/20 text-sm font-semibold rounded-2xl px-5 py-3 focus:border-[#E8D19E]"
+                  className="flex-1 bg-canvas border border-white/20 text-sm font-semibold rounded-2xl px-5 py-3 focus:border-sand"
                 />
                 <button
                   type="submit"
-                  className="action-pill bg-[#E8D19E] text-[#1e1333] font-black hover:bg-white"
+                  className="action-pill bg-sand text-canvas font-black hover:bg-white"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Aggiungi</span>

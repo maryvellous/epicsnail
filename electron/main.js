@@ -214,7 +214,7 @@ ipcMain.handle('google:get-status', async () => {
 });
 
 ipcMain.handle('google:disconnect', async () => {
-  return authVault.removeToken('google_tokens');
+  return await googleTools.disconnect();
 });
 
 ipcMain.handle('google:get-events', async (event, maxResults) => {

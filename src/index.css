@@ -1,20 +1,33 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
+@theme {
+  --color-canvas: #1e1333;
+  --color-card: #5c2a5c;
+  --color-plum: #833d6f;
+  --color-plum-muted: #785076;
+  --color-sage: #9ca98b;
+  --color-blue: #a8c6de;
+  --color-sand: #efdebd;
+  --color-terracotta: #8f5a5a;
+  --color-sidebar: #6e5a8e;
+  --color-lavender: #9a85c0;
+}
+
 :root {
-  /* Exact Palette from palette dashboard.png & NexaVerse inspiration */
-  --sidebar-purple: #6B5887;
+  /* Nuova Palette Restrittiva (10 Colori Ufficiali) */
+  --sidebar-purple: #6e5a8e;
   --bg-canvas: #1e1333;
-  --bg-canvas-card: #2b1c47;
+  --bg-canvas-card: #5c2a5c;
   
   /* Palette Colors */
-  --palette-blue: #A5C4DC;
-  --palette-sage: #98A78A;
-  --palette-sand: #E8D19E;
-  --palette-lavender: #9D85C6;
-  --palette-plum: #7A3F67;
-  --palette-terracotta: #8F5A5A;
-  --palette-warm-sand: #BC957D;
+  --palette-blue: #a8c6de;
+  --palette-sage: #9ca98b;
+  --palette-sand: #efdebd;
+  --palette-lavender: #9a85c0;
+  --palette-plum: #833d6f;
+  --palette-plum-muted: #785076;
+  --palette-terracotta: #8f5a5a;
 
   --font-heading: 'Outfit', -apple-system, sans-serif;
   --font-body: 'Inter', -apple-system, sans-serif;
@@ -47,12 +60,12 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(157, 133, 198, 0.4);
+  background: rgba(154, 133, 192, 0.4);
   border-radius: var(--radius-pill);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(157, 133, 198, 0.7);
+  background: rgba(154, 133, 192, 0.7);
 }
 
 /* EXPLICIT CANVAS OUTER PADDING */
@@ -177,12 +190,12 @@ html, body {
   padding: 6px 12px !important;
   min-height: 28px !important;
   border-radius: 12px !important;
-  background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%) !important;
+  background: linear-gradient(135deg, #833d6f 0%, #9a85c0 100%) !important;
   color: #ffffff !important;
   font-size: 11px !important;
   font-weight: 800 !important;
   letter-spacing: 0.3px !important;
-  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4) !important;
+  box-shadow: 0 4px 12px rgba(131, 61, 111, 0.4) !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
 }
@@ -190,17 +203,17 @@ html, body {
 /* Preset Palette Themes for Cards */
 .theme-blue {
   background-color: var(--palette-blue) !important;
-  color: #0f273b !important;
+  color: #1e1333 !important;
 }
 
 .theme-sage {
   background-color: var(--palette-sage) !important;
-  color: #15260f !important;
+  color: #1e1333 !important;
 }
 
 .theme-sand {
   background-color: var(--palette-sand) !important;
-  color: #3b2c0f !important;
+  color: #1e1333 !important;
 }
 
 .theme-lavender {
@@ -219,8 +232,8 @@ html, body {
 }
 
 .theme-warm-sand {
-  background-color: var(--palette-warm-sand) !important;
-  color: #2e1d14 !important;
+  background-color: var(--palette-plum-muted) !important;
+  color: #ffffff !important;
 }
 
 .theme-default {
@@ -236,8 +249,8 @@ html, body {
   right: 16px !important;
   z-index: 40 !important;
   width: 260px !important;
-  background: linear-gradient(135deg, #fef08a 0%, #fef9c3 100%) !important;
-  color: #451a03 !important;
+  background: linear-gradient(135deg, #efdebd 0%, rgba(239, 222, 189, 0.85) 100%) !important;
+  color: #1e1333 !important;
   padding: 20px !important;
   border-radius: 16px !important;
   box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(0, 0, 0, 0.1) !important;
@@ -346,7 +359,7 @@ html, body {
   position: absolute;
   inset: 0;
   background-color: #1e1333;
-  border: 1.5px solid rgba(157, 133, 198, 0.35);
+  border: 1.5px solid rgba(154, 133, 192, 0.35);
   border-radius: 9999px;
   transition: all 0.25s ease-in-out;
   cursor: pointer;
@@ -358,15 +371,15 @@ html, body {
   width: 17px;
   left: 3px;
   bottom: 2.5px;
-  background-color: #6B5887;
+  background-color: #6e5a8e;
   border-radius: 50%;
   transition: all 0.25s ease-in-out;
 }
 .hub-toggle input:checked + .hub-toggle-slider {
-  background-color: #7A3F67;
-  border-color: #E8D19E;
+  background-color: #833d6f;
+  border-color: #efdebd;
 }
 .hub-toggle input:checked + .hub-toggle-slider::before {
   transform: translateX(20px);
-  background-color: #E8D19E;
+  background-color: #efdebd;
 }

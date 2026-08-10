@@ -34,7 +34,7 @@ function MainContent({ currentTab, setCurrentTab, onOpenSearch }) {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden bg-gradient-to-b from-[#432A69] via-[#2f1d4b] to-[#1c0f32]">
+    <div className="flex-1 flex flex-col h-full overflow-hidden bg-gradient-to-b from-sidebar via-card to-canvas">
       <Header onOpenSearch={onOpenSearch} />
       <div className="flex-1 flex overflow-hidden">
         {currentTab === 'today'     && <TodayView />}

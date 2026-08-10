@@ -241,6 +241,32 @@ class OAuthManager {
       return { success: false, error: e.message };
     }
   }
+
+  // Revoke Google Access or Refresh Token
+  static async revokeGoogleToken(token) {
+    if (!token) {
+      return { success: false, error: 'Nessun token fornito per la revoca' };
+    }
+
+    try {
+      const bodyParams = new URLSearchParams({ token });
+
+      const res = await fetch('https://oauth2.googleapis.com/revoke', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: bodyParams.toString(),
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        return { success: false, error: errJson.error_description || errJson.error || `HTTP ${res.status}` };
+      }
+
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  }
 }
 
 module.exports = OAuthManager;

@@ -71,6 +71,24 @@ class GoogleTools {
     return { status: 'connected', userEmail: tokens.user_email || '' };
   }
 
+  async disconnect() {
+    const tokens = this.getTokens();
+    if (tokens) {
+      const tokenToRevoke = tokens.refresh_token || tokens.access_token;
+      if (tokenToRevoke) {
+        try {
+          const revokeRes = await OAuthManager.revokeGoogleToken(tokenToRevoke);
+          if (!revokeRes.success) {
+            console.warn('Revoca token Google fallita (procedo comunque con la disconnessione locale):', revokeRes.error);
+          }
+        } catch (e) {
+          console.warn('Errore durante la revoca token Google:', e.message);
+        }
+      }
+    }
+    return this.authVault.removeToken('google_tokens');
+  }
+
   async getCalendarEvents(maxResults = 10) {
     const accessToken = await this.getValidAccessToken();
     if (!accessToken) return { success: false, error: 'Account Google non connesso o token scaduto' };

@@ -168,7 +168,7 @@ export function GamificationProvider({ children }) {
         particleCount: 120,
         spread: 90,
         origin: { y: 0.5 },
-        colors: ['#a855f7', '#06b6d4', '#ec4899', '#E8D19E', '#9D85C6'],
+        colors: ['#9a85c0', '#efdebd', '#a8c6de', '#9ca98b', '#785076', '#833d6f'],
       });
     }
 

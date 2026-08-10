@@ -41,19 +41,19 @@ export const getBlockAccent = (code) => {
 };
 
 export const ACCENT_COLORS = {
-  sage: '#98A78A',
-  lavender: '#9D85C6',
-  plum: '#7A3F67',
-  blue: '#A5C4DC',
-  'warm-sand': '#BC957D',
-  terracotta: '#8F5A5A',
-  sand: '#E8D19E',
+  sage: '#9ca98b',
+  lavender: '#9a85c0',
+  plum: '#833d6f',
+  blue: '#a8c6de',
+  'warm-sand': '#785076',
+  terracotta: '#8f5a5a',
+  sand: '#efdebd',
 };
 
 export const LANGUAGE_COLORS = {
-  python: '#A5C4DC',
-  javascript: '#BC957D',
-  pseudocode: '#9D85C6',
+  python: '#a8c6de',
+  javascript: '#efdebd',
+  pseudocode: '#9a85c0',
 };
 
 export const LANGUAGE_LABELS = {
@@ -63,16 +63,16 @@ export const LANGUAGE_LABELS = {
 };
 
 export const MODE_METADATA = {
-  sort: { label: 'Riordina', color: '#9D85C6', themeClass: 'theme-lavender', desc: 'Riordina le righe nel giusto ordine' },
-  fill: { label: 'Riempi Vuoti', color: '#E8D19E', themeClass: 'theme-sand', desc: 'Inserisci il token mancante al posto di ???' },
-  bug: { label: 'Caccia al Bug', color: '#8F5A5A', themeClass: 'theme-terracotta', desc: 'Trova e schiaccia la riga di codice sbagliata' },
-  match: { label: 'Collega Coppie', color: '#98A78A', themeClass: 'theme-sage', desc: 'Associa ogni concetto alla sua descrizione' },
+  sort: { label: 'Riordina', color: '#9a85c0', themeClass: 'theme-lavender', desc: 'Riordina le righe nel giusto ordine' },
+  fill: { label: 'Riempi Vuoti', color: '#efdebd', themeClass: 'theme-sand', desc: 'Inserisci il token mancante al posto di ???' },
+  bug: { label: 'Caccia al Bug', color: '#8f5a5a', themeClass: 'theme-terracotta', desc: 'Trova e schiaccia la riga di codice sbagliata' },
+  match: { label: 'Collega Coppie', color: '#9ca98b', themeClass: 'theme-sage', desc: 'Associa ogni concetto alla sua descrizione' },
 };
 
 export const DIFFICULTY_COLORS = {
-  easy: '#98A78A',
-  medium: '#E8D19E',
-  hard: '#8F5A5A',
+  easy: '#9ca98b',
+  medium: '#efdebd',
+  hard: '#8f5a5a',
 };
 
 export const DIFFICULTY_LABELS = {

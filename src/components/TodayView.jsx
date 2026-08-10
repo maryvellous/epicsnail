@@ -72,7 +72,7 @@ function TodayHeader({ userName, level, xpInCurrentLevel, xpNeededForNext, level
         >
           Bentornato{userName ? `, ${userName}` : ''}!
         </h1>
-        <span className="inline-block mt-2 px-3 py-1 bg-[#E8D19E]/20 text-[#E8D19E] border border-[#E8D19E]/40 rounded-full font-mono text-[11px] font-bold">
+        <span className="inline-block mt-2 px-3 py-1 bg-[#efdebd]/20 text-[#efdebd] border border-[#efdebd]/40 rounded-full font-mono text-[11px] font-bold">
           Google Workspace Hub Attivo
         </span>
       </div>
@@ -89,8 +89,8 @@ function TodayHeader({ userName, level, xpInCurrentLevel, xpNeededForNext, level
             fontWeight: 700,
           }}
         >
-          <span style={{ color: '#E8D19E' }}>Livello {level}</span>
-          <span style={{ color: 'rgba(232,209,158,0.55)' }}>
+          <span style={{ color: '#efdebd' }}>Livello {level}</span>
+          <span style={{ color: 'rgba(239,222,189,0.55)' }}>
             {xpInCurrentLevel} / {xpNeededForNext} XP
           </span>
         </div>
@@ -98,7 +98,7 @@ function TodayHeader({ userName, level, xpInCurrentLevel, xpNeededForNext, level
           style={{
             height: 6,
             borderRadius: 99,
-            background: 'rgba(157,133,198,0.18)',
+            background: 'rgba(154,133,192,0.18)',
             overflow: 'hidden',
           }}
         >
@@ -107,7 +107,7 @@ function TodayHeader({ userName, level, xpInCurrentLevel, xpNeededForNext, level
               height: '100%',
               width: `${levelProgress}%`,
               borderRadius: 99,
-              background: 'linear-gradient(90deg, #9D85C6, #E8D19E)',
+              background: 'linear-gradient(90deg, #9a85c0, #efdebd)',
               transition: 'width 0.6s ease',
             }}
           />
@@ -138,7 +138,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
           style={{
             fontSize: 15,
             fontWeight: 900,
-            color: '#E8D19E',
+            color: '#efdebd',
             fontFamily: "'JetBrains Mono', monospace",
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
@@ -152,7 +152,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
             style={{
               fontSize: 11,
               fontWeight: 700,
-              color: 'rgba(232,209,158,0.55)',
+              color: 'rgba(239,222,189,0.55)',
               fontFamily: "'JetBrains Mono', monospace",
             }}
           >
@@ -167,7 +167,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
           style={{
             height: 4,
             borderRadius: 99,
-            background: 'rgba(157,133,198,0.15)',
+            background: 'rgba(154,133,192,0.15)',
             overflow: 'hidden',
             marginTop: -10,
           }}
@@ -177,7 +177,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
               height: '100%',
               width: total > 0 ? `${(completed / total) * 100}%` : '0%',
               borderRadius: 99,
-              background: 'linear-gradient(90deg, #98A78A, #E8D19E)',
+              background: 'linear-gradient(90deg, #9ca98b, #efdebd)',
               transition: 'width 0.4s ease',
             }}
           />
@@ -194,7 +194,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
           style={{
             flex: 1,
             background: 'rgba(30, 19, 51, 0.7)',
-            border: '1px solid rgba(157,133,198,0.2)',
+            border: '1px solid rgba(154,133,192,0.2)',
             borderRadius: 12,
             padding: '9px 14px',
             color: '#fff',
@@ -207,11 +207,11 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
         <button
           type="submit"
           style={{
-            background: 'rgba(157,133,198,0.25)',
-            border: '1px solid rgba(157,133,198,0.35)',
+            background: 'rgba(154,133,192,0.25)',
+            border: '1px solid rgba(154,133,192,0.35)',
             borderRadius: 12,
             padding: '9px 16px',
-            color: '#E8D19E',
+            color: '#efdebd',
             fontWeight: 800,
             fontSize: 13,
             cursor: 'pointer',
@@ -221,8 +221,8 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
             transition: 'background 0.2s',
             whiteSpace: 'nowrap',
           }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(157,133,198,0.4)')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(157,133,198,0.25)')}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(154,133,192,0.4)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(154,133,192,0.25)')}
         >
           <Plus size={15} strokeWidth={3} />
           Aggiungi
@@ -235,7 +235,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
           <p
             style={{
               textAlign: 'center',
-              color: 'rgba(157,133,198,0.5)',
+              color: 'rgba(154,133,192,0.5)',
               fontSize: 13,
               fontWeight: 600,
               padding: '24px 0',
@@ -255,9 +255,9 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
                 padding: '10px 14px',
                 borderRadius: 13,
                 background: t.completed
-                  ? 'rgba(152, 167, 138, 0.12)'
+                  ? 'rgba(156, 169, 139, 0.12)'
                   : 'rgba(30, 19, 51, 0.5)',
-                border: '1px solid rgba(157,133,198,0.12)',
+                border: '1px solid rgba(154,133,192,0.12)',
                 transition: 'background 0.2s',
                 gap: 10,
               }}
@@ -275,9 +275,9 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
                 }}
               >
                 {t.completed ? (
-                  <CheckCircle2 size={18} style={{ color: '#98A78A', flexShrink: 0 }} />
+                  <CheckCircle2 size={18} style={{ color: '#9ca98b', flexShrink: 0 }} />
                 ) : (
-                  <Circle size={18} style={{ color: 'rgba(157,133,198,0.4)', flexShrink: 0 }} />
+                  <Circle size={18} style={{ color: 'rgba(154,133,192,0.4)', flexShrink: 0 }} />
                 )}
                 <span
                   style={{
@@ -309,7 +309,7 @@ function TodayTaskPanel({ tasks, addTask, toggleTask, deleteTask }) {
                   transition: 'color 0.2s',
                   flexShrink: 0,
                 }}
-                className="group-hover:!text-[#8F5A5A]"
+                className="group-hover:!text-[#8f5a5a]"
               >
                 <Trash2 size={14} strokeWidth={2} />
               </button>
@@ -330,7 +330,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
           style={{
             fontSize: 13,
             fontWeight: 900,
-            color: '#A5C4DC',
+            color: '#a8c6de',
             fontFamily: "'JetBrains Mono', monospace",
             letterSpacing: '0.07em',
             textTransform: 'uppercase',
@@ -344,7 +344,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
           {projects.length === 0 ? (
             <p
               style={{
-                color: 'rgba(165,196,220,0.4)',
+                color: 'rgba(168,198,222,0.4)',
                 fontSize: 12,
                 fontWeight: 600,
                 fontFamily: "'JetBrains Mono', monospace",
@@ -366,13 +366,13 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                     padding: '9px 12px',
                     borderRadius: 12,
                     background: 'rgba(30, 19, 51, 0.5)',
-                    border: '1px solid rgba(165,196,220,0.12)',
+                    border: '1px solid rgba(168,198,222,0.12)',
                     cursor: 'pointer',
                     transition: 'background 0.2s',
                     gap: 8,
                   }}
                   onMouseEnter={(e) =>
-                    (e.currentTarget.style.background = 'rgba(165,196,220,0.1)')
+                    (e.currentTarget.style.background = 'rgba(168,198,222,0.1)')
                   }
                   onMouseLeave={(e) =>
                     (e.currentTarget.style.background = 'rgba(30, 19, 51, 0.5)')
@@ -396,7 +396,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                       <span
                         style={{
                           fontSize: 10,
-                          color: 'rgba(165,196,220,0.55)',
+                          color: 'rgba(168,198,222,0.55)',
                           fontFamily: "'JetBrains Mono', monospace",
                           fontWeight: 600,
                         }}
@@ -405,7 +405,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                       </span>
                     )}
                   </div>
-                  <ArrowUpRight size={14} style={{ color: 'rgba(165,196,220,0.5)', flexShrink: 0 }} />
+                  <ArrowUpRight size={14} style={{ color: 'rgba(168,198,222,0.5)', flexShrink: 0 }} />
                 </div>
               );
             })
@@ -420,7 +420,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
             style={{
               fontSize: 13,
               fontWeight: 900,
-              color: '#A5C4DC',
+              color: '#a8c6de',
               fontFamily: "'JetBrains Mono', monospace",
               letterSpacing: '0.07em',
               textTransform: 'uppercase',
@@ -443,13 +443,13 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                   padding: '8px 11px',
                   borderRadius: 11,
                   background: 'rgba(30,19,51,0.5)',
-                  border: '1px solid rgba(165,196,220,0.1)',
+                  border: '1px solid rgba(168,198,222,0.1)',
                   textDecoration: 'none',
                   transition: 'background 0.2s',
                   gap: 8,
                 }}
                 onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = 'rgba(165,196,220,0.08)')
+                  (e.currentTarget.style.background = 'rgba(168,198,222,0.08)')
                 }
                 onMouseLeave={(e) =>
                   (e.currentTarget.style.background = 'rgba(30,19,51,0.5)')
@@ -459,7 +459,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                   {f.iconLink ? (
                     <img src={f.iconLink} alt="" style={{ width: 14, height: 14, flexShrink: 0 }} />
                   ) : (
-                    <HardDrive size={13} style={{ color: '#A5C4DC', flexShrink: 0 }} />
+                    <HardDrive size={13} style={{ color: '#a8c6de', flexShrink: 0 }} />
                   )}
                   <span
                     style={{
@@ -474,7 +474,7 @@ function TodayProjectsPanel({ projects, projectNicknames, setActiveProject, driv
                     {f.name}
                   </span>
                 </div>
-                <ExternalLink size={11} style={{ color: 'rgba(165,196,220,0.5)', flexShrink: 0 }} />
+                <ExternalLink size={11} style={{ color: 'rgba(168,198,222,0.5)', flexShrink: 0 }} />
               </a>
             ))}
           </div>
@@ -516,7 +516,7 @@ export default function TodayView() {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(145deg, #1e1333 0%, #2a1545 60%, #1a0f2e 100%)',
+          background: 'linear-gradient(145deg, #1e1333 0%, #5c2a5c 60%, #1e1333 100%)',
           zIndex: 0,
         }}
       />
@@ -531,7 +531,7 @@ export default function TodayView() {
           width: 500,
           height: 500,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(122,63,103,0.15) 0%, rgba(107,88,135,0.08) 50%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(131,61,111,0.15) 0%, rgba(110,90,142,0.08) 50%, transparent 70%)',
           filter: 'blur(40px)',
           pointerEvents: 'none',
           userSelect: 'none',
@@ -606,11 +606,11 @@ export default function TodayView() {
           bottom: 28,
           left: 28,
           zIndex: 30,
-          background: 'rgba(232, 209, 158, 0.18)',
-          border: '1px solid rgba(232, 209, 158, 0.35)',
+          background: 'rgba(239, 222, 189, 0.18)',
+          border: '1px solid rgba(239, 222, 189, 0.35)',
           borderRadius: 14,
           padding: '9px 16px',
-          color: '#E8D19E',
+          color: '#efdebd',
           fontWeight: 800,
           fontSize: 12,
           fontFamily: "'JetBrains Mono', monospace",
@@ -623,11 +623,11 @@ export default function TodayView() {
           transition: 'background 0.2s, transform 0.15s',
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = 'rgba(232, 209, 158, 0.3)';
+          e.currentTarget.style.background = 'rgba(239, 222, 189, 0.3)';
           e.currentTarget.style.transform = 'scale(1.04)';
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = 'rgba(232, 209, 158, 0.18)';
+          e.currentTarget.style.background = 'rgba(239, 222, 189, 0.18)';
           e.currentTarget.style.transform = 'scale(1)';
         }}
       >

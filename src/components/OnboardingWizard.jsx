@@ -127,14 +127,14 @@ export default function OnboardingWizard() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-[#1e1333]/90 backdrop-blur-md select-none">
-      <div className="w-full max-w-xl bg-[#2b1c47] text-white flex flex-col overflow-hidden shadow-2xl border border-[#9D85C6]/30 rounded-[28px]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-canvas/90 backdrop-blur-md select-none">
+      <div className="w-full max-w-xl bg-card text-white flex flex-col overflow-hidden shadow-2xl border border-lavender/30 rounded-[28px]">
         
         {/* Header Wizard */}
-        <div className="p-7 bg-[#1e1333] border-b border-white/10 flex items-center justify-between">
+        <div className="p-7 bg-canvas border-b border-white/10 flex items-center justify-between">
           <div>
             <h2 className="font-heading font-black text-2xl text-white">Setup Diaspro Viboard Hub</h2>
-            <p className="text-xs text-[#9D85C6] font-mono mt-1">Passo {step} di 3</p>
+            <p className="text-xs text-lavender font-mono mt-1">Passo {step} di 3</p>
           </div>
 
           {/* Step Indicator */}
@@ -143,7 +143,7 @@ export default function OnboardingWizard() {
               <div
                 key={s}
                 className={`h-2.5 rounded-full transition-all duration-300 ${
-                  s === step ? 'w-8 bg-[#9D85C6]' : s < step ? 'w-2.5 bg-[#98A78A]' : 'w-2.5 bg-white/20'
+                  s === step ? 'w-8 bg-lavender' : s < step ? 'w-2.5 bg-sage' : 'w-2.5 bg-white/20'
                 }`}
               />
             ))}
@@ -156,12 +156,12 @@ export default function OnboardingWizard() {
           {/* STEP 1: LOGIN GOOGLE WORKSPACE OBBLIGATORIO */}
           {step === 1 && (
             <div className="flex flex-col gap-6">
-              <div className="p-5 rounded-2xl bg-[#E8D19E]/10 border border-[#E8D19E]/30 flex items-start gap-4">
-                <div className="p-3 bg-[#E8D19E]/20 rounded-xl">
+              <div className="p-5 rounded-2xl bg-sand/10 border border-sand/30 flex items-start gap-4">
+                <div className="p-3 bg-sand/20 rounded-xl">
                   <GoogleIcon className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-bold text-lg text-[#E8D19E]">
+                  <h3 className="font-heading font-bold text-lg text-sand">
                     Account Google Master Obbligatorio
                   </h3>
                   <p className="text-xs text-white/80 leading-relaxed font-body mt-1">
@@ -171,23 +171,23 @@ export default function OnboardingWizard() {
               </div>
 
               {googleStatus.status === 'connected' ? (
-                <div className="p-5 rounded-2xl bg-[#98A78A]/20 border border-[#98A78A]/50 flex items-center justify-between">
+                <div className="p-5 rounded-2xl bg-sage/20 border border-sage/50 flex items-center justify-between">
                   <div className="flex items-center gap-3.5">
                     {googleStatus.avatarUrl ? (
-                      <img src={googleStatus.avatarUrl} alt="Avatar" className="w-10 h-10 rounded-full border border-[#98A78A]" />
+                      <img src={googleStatus.avatarUrl} alt="Avatar" className="w-10 h-10 rounded-full border border-sage" />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#98A78A]/30 flex items-center justify-between p-2">
-                        <AestheticIdCardIcon className="w-6 h-6 text-[#98A78A]" />
+                      <div className="w-10 h-10 rounded-full bg-sage/30 flex items-center justify-between p-2">
+                        <AestheticIdCardIcon className="w-6 h-6 text-sage" />
                       </div>
                     )}
                     <div>
                       <p className="text-sm font-semibold text-white">
                         {googleStatus.userName || 'Account Google Connesso'}
                       </p>
-                      <p className="text-xs text-[#98A78A]">Google Workspace Master Attivo</p>
+                      <p className="text-xs text-sage">Google Workspace Master Attivo</p>
                     </div>
                   </div>
-                  <span className="text-xs font-mono font-bold text-[#98A78A] bg-[#98A78A]/20 px-3 py-1 rounded-full border border-[#98A78A]/30">
+                  <span className="text-xs font-mono font-bold text-sage bg-sage/20 px-3 py-1 rounded-full border border-sage/30">
                     CONNESSO
                   </span>
                 </div>
@@ -196,12 +196,12 @@ export default function OnboardingWizard() {
                   <button
                     onClick={handleGoogleLogin}
                     disabled={connectingGoogle}
-                    className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#9D85C6] to-[#7A3F67] hover:brightness-110 active:scale-[0.99] transition-all duration-200 text-white font-heading font-black text-base shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
+                    className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-lavender to-plum hover:brightness-110 active:scale-[0.99] transition-all duration-200 text-white font-heading font-black text-base shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
                   >
                     <GoogleIcon className="w-6 h-6" />
                     {connectingGoogle ? 'Autenticazione in corso...' : 'Accedi con Google Master'}
                   </button>
-                  <p className="text-[11px] text-[#BC957D] text-center max-w-sm">
+                  <p className="text-[11px] text-plum-muted text-center max-w-sm">
                     L'autenticazione sblocchera le viste *Oggi*, *Calendario* e fornira il contesto per il chatbot IA.
                   </p>
                 </div>
@@ -212,12 +212,12 @@ export default function OnboardingWizard() {
           {/* STEP 2: INTELLIGENZA ARTIFICIALE (DIASPRO AI MULTI-PROVIDER) */}
           {step === 2 && (
             <div className="flex flex-col gap-6">
-              <div className="p-5 rounded-2xl bg-[#9D85C6]/10 border border-[#9D85C6]/30 flex items-start gap-4">
-                <div className="p-3 bg-[#9D85C6]/20 rounded-xl">
-                  <AestheticKeyIcon className="w-8 h-8 text-[#9D85C6]" />
+              <div className="p-5 rounded-2xl bg-lavender/10 border border-lavender/30 flex items-start gap-4">
+                <div className="p-3 bg-lavender/20 rounded-xl">
+                  <AestheticKeyIcon className="w-8 h-8 text-lavender" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-bold text-lg text-[#9D85C6]">
+                  <h3 className="font-heading font-bold text-lg text-lavender">
                     Configurazione Diaspro AI
                   </h3>
                   <p className="text-xs text-white/80 leading-relaxed font-body mt-1">
@@ -228,7 +228,7 @@ export default function OnboardingWizard() {
 
               <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-mono font-semibold text-[#9D85C6] uppercase tracking-wider">
+                  <label className="text-xs font-mono font-semibold text-lavender uppercase tracking-wider">
                     Provider IA
                   </label>
                   <select
@@ -238,27 +238,27 @@ export default function OnboardingWizard() {
                       setApiKey('');
                       setAiStatus(null);
                     }}
-                    className="bg-black/40 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-bold text-sm focus:outline-none focus:border-[#9D85C6]"
+                    className="bg-black/40 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-bold text-sm focus:outline-none focus:border-lavender"
                   >
-                    <option value="gemini" className="bg-[#2b1c47] text-white">Google Gemini (Consigliato)</option>
-                    <option value="anthropic" className="bg-[#2b1c47] text-white">Anthropic (Claude)</option>
-                    <option value="deepseek" className="bg-[#2b1c47] text-white">DeepSeek</option>
-                    <option value="openai" className="bg-[#2b1c47] text-white">OpenAI</option>
-                    <option value="ollama" className="bg-[#2b1c47] text-white">Ollama (Locale)</option>
+                    <option value="gemini" className="bg-card text-white">Google Gemini (Consigliato)</option>
+                    <option value="anthropic" className="bg-card text-white">Anthropic (Claude)</option>
+                    <option value="deepseek" className="bg-card text-white">DeepSeek</option>
+                    <option value="openai" className="bg-card text-white">OpenAI</option>
+                    <option value="ollama" className="bg-card text-white">Ollama (Locale)</option>
                   </select>
                 </div>
 
                 {provider !== 'ollama' && (
                   <div className="flex flex-col gap-2">
                     <div className="flex justify-between items-center">
-                      <label className="text-xs font-mono font-semibold text-[#9D85C6] uppercase tracking-wider">
+                      <label className="text-xs font-mono font-semibold text-lavender uppercase tracking-wider">
                         Chiave API {providerInfo[provider].name}
                       </label>
                       <a
                         href={providerInfo[provider].link}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs text-[#A5C4DC] hover:underline flex items-center gap-1 font-mono"
+                        className="text-xs text-blue hover:underline flex items-center gap-1 font-mono"
                       >
                         Ottieni chiave API <ExternalLink className="w-3 h-3" />
                       </a>
@@ -270,12 +270,12 @@ export default function OnboardingWizard() {
                         placeholder={providerInfo[provider].placeholder}
                         value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
-                        className="flex-1 bg-black/30 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-mono text-xs focus:outline-none focus:border-[#9D85C6]"
+                        className="flex-1 bg-black/30 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-mono text-xs focus:outline-none focus:border-lavender"
                       />
                       <button
                         onClick={handleTestAiKey}
                         disabled={aiTesting || !apiKey.trim()}
-                        className="action-pill bg-[#9D85C6] hover:bg-[#6B5887] text-white disabled:opacity-50"
+                        className="action-pill bg-lavender hover:bg-sidebar text-white disabled:opacity-50"
                       >
                         {aiTesting ? 'Verifica...' : 'Test Chiave'}
                       </button>
@@ -289,7 +289,7 @@ export default function OnboardingWizard() {
                     <button
                       onClick={handleTestAiKey}
                       disabled={aiTesting}
-                      className="action-pill bg-[#9D85C6] hover:bg-[#6B5887] text-white"
+                      className="action-pill bg-lavender hover:bg-sidebar text-white"
                     >
                       {aiTesting ? 'Verifica...' : 'Test Ollama'}
                     </button>
@@ -298,7 +298,7 @@ export default function OnboardingWizard() {
 
                 {aiStatus && (
                   <div className={`p-3.5 rounded-2xl border text-xs font-mono font-semibold ${
-                    aiStatus.success ? 'bg-[#98A78A]/20 border-[#98A78A] text-[#98A78A]' : 'bg-rose-950/40 border-rose-500/50 text-rose-300'
+                    aiStatus.success ? 'bg-sage/20 border-sage text-sage' : 'bg-canvas border-terracotta/50 text-terracotta'
                   }`}>
                     {aiStatus.message || aiStatus.error}
                   </div>
@@ -310,12 +310,12 @@ export default function OnboardingWizard() {
           {/* STEP 3: INTEGRAZIONI OPZIONALI (GITHUB, SPOTIFY, PINTEREST) */}
           {step === 3 && (
             <div className="flex flex-col gap-6">
-              <div className="p-5 rounded-2xl bg-[#98A78A]/10 border border-[#98A78A]/30 flex items-start gap-4">
-                <div className="p-3 bg-[#98A78A]/20 rounded-xl">
-                  <AestheticGlobeIcon className="w-8 h-8 text-[#98A78A]" />
+              <div className="p-5 rounded-2xl bg-sage/10 border border-sage/30 flex items-start gap-4">
+                <div className="p-3 bg-sage/20 rounded-xl">
+                  <AestheticGlobeIcon className="w-8 h-8 text-sage" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-bold text-lg text-[#98A78A]">
+                  <h3 className="font-heading font-bold text-lg text-sage">
                     Integrazioni Opzionali
                   </h3>
                   <p className="text-xs text-white/80 leading-relaxed font-body mt-1">
@@ -328,7 +328,7 @@ export default function OnboardingWizard() {
                 {/* GitHub Token */}
                 <div className="flex flex-col gap-2">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-mono font-semibold text-[#98A78A] uppercase tracking-wider flex items-center gap-2">
+                    <label className="text-xs font-mono font-semibold text-sage uppercase tracking-wider flex items-center gap-2">
                       <GithubIcon className="w-4 h-4 text-white" />
                       <span>GitHub Access Token</span>
                     </label>
@@ -336,7 +336,7 @@ export default function OnboardingWizard() {
                       href="https://github.com/settings/tokens"
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs text-[#A5C4DC] hover:underline flex items-center gap-1 font-mono"
+                      className="text-xs text-blue hover:underline flex items-center gap-1 font-mono"
                     >
                       Genera Token <ExternalLink className="w-3 h-3" />
                     </a>
@@ -348,19 +348,19 @@ export default function OnboardingWizard() {
                       placeholder="Incolla token ghp_..."
                       value={githubToken}
                       onChange={(e) => setGithubToken(e.target.value)}
-                      className="flex-1 bg-black/30 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-mono text-xs focus:outline-none focus:border-[#98A78A]"
+                      className="flex-1 bg-black/30 border border-white/20 text-white rounded-2xl px-5 py-3.5 font-mono text-xs focus:outline-none focus:border-sage"
                     />
                     <button
                       onClick={handleValidateGitHub}
                       disabled={ghValidating || !githubToken.trim()}
-                      className="action-pill bg-[#98A78A] hover:bg-[#6B5887] text-white disabled:opacity-50"
+                      className="action-pill bg-sage hover:bg-sidebar text-white disabled:opacity-50"
                     >
                       {ghValidating ? 'Verifica...' : 'Valida Token'}
                     </button>
                   </div>
 
                   {ghUser && (
-                    <div className="p-3 rounded-xl bg-[#98A78A]/20 border border-[#98A78A]/40 flex items-center gap-3">
+                    <div className="p-3 rounded-xl bg-sage/20 border border-sage/40 flex items-center gap-3">
                       <img src={ghUser.avatar_url} alt={ghUser.login} className="w-7 h-7 rounded-full" />
                       <div className="font-mono text-xs text-white">
                         <span className="font-bold">{ghUser.name || ghUser.login}</span>
@@ -370,7 +370,7 @@ export default function OnboardingWizard() {
                   )}
 
                   {ghError && (
-                    <div className="p-3 rounded-xl bg-rose-950/40 border border-rose-500/50 text-rose-300 text-xs font-mono">
+                    <div className="p-3 rounded-xl bg-canvas border border-terracotta/50 text-terracotta text-xs font-mono">
                       {ghError}
                     </div>
                   )}
@@ -382,7 +382,7 @@ export default function OnboardingWizard() {
         </div>
 
         {/* Footer Navigation */}
-        <div className="p-6 bg-[#1e1333] border-t border-white/10 flex items-center justify-between">
+        <div className="p-6 bg-canvas border-t border-white/10 flex items-center justify-between">
           {step > 1 ? (
             <button
               onClick={() => setStep(step - 1)}
@@ -396,7 +396,7 @@ export default function OnboardingWizard() {
             <button
               onClick={() => setStep(step + 1)}
               disabled={step === 1 && googleStatus.status !== 'connected'}
-              className="action-pill bg-[#9D85C6] hover:bg-[#6B5887] text-white disabled:opacity-40 disabled:cursor-not-allowed"
+              className="action-pill bg-lavender hover:bg-sidebar text-white disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span>Continua</span>
               <ArrowRight className="w-4 h-4" />
@@ -404,7 +404,7 @@ export default function OnboardingWizard() {
           ) : (
             <button
               onClick={handleFinish}
-              className="action-pill bg-[#98A78A] hover:bg-[#6B5887] text-white font-bold"
+              className="action-pill bg-sage hover:bg-sidebar text-white font-bold"
             >
               <span>Completa Setup ed Entra nell'Hub</span>
             </button>

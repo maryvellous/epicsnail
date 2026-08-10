@@ -22,12 +22,12 @@ const BUBBLES = [
 ];
 
 const BUBBLE_COLORS = [
-  'rgba(122, 63, 103, 0.55)',  // Plum
-  'rgba(157, 133, 198, 0.45)', // Lavender
-  'rgba(107, 88, 135, 0.50)',  // Sidebar Purple
-  'rgba(165, 196, 220, 0.35)', // Blue Accent
-  'rgba(152, 167, 138, 0.40)', // Sage
-  'rgba(143, 90, 90, 0.40)',   // Terracotta
+  'rgba(131, 61, 111, 0.55)',  // Plum (#833d6f)
+  'rgba(154, 133, 192, 0.45)', // Lavender (#9a85c0)
+  'rgba(110, 90, 142, 0.50)',  // Sidebar Purple (#6e5a8e)
+  'rgba(168, 198, 222, 0.35)', // Blue Accent (#a8c6de)
+  'rgba(156, 169, 139, 0.40)', // Sage (#9ca98b)
+  'rgba(143, 90, 90, 0.40)',   // Terracotta (#8f5a5a)
 ];
 
 export default function Sidebar({ currentTab, setCurrentTab }) {
@@ -45,7 +45,7 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
   ];
 
   return (
-    <aside className="w-32 md:w-38 h-full py-6 px-3 flex flex-col items-center justify-between bg-[#6B5887] select-none z-30 shadow-2xl relative overflow-hidden">
+    <aside className="w-32 md:w-38 h-full py-6 px-3 flex flex-col items-center justify-between bg-sidebar select-none z-30 shadow-2xl relative overflow-hidden">
 
       {/* ── Lava Lamp Layer ── */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">
@@ -72,10 +72,10 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
         <div className="flex flex-col items-center gap-1.5 group cursor-pointer" title="Diaspro Viboard">
           <img src={vLogo} alt="Diaspro Viboard Logo" className="w-14 h-14 object-contain filter drop-shadow-xl group-hover:scale-110 transition-transform duration-300" />
           <div className="flex flex-col items-center text-center">
-            <span className="text-[14px] font-black tracking-tight bg-gradient-to-r from-[#E8D19E] via-[#9D85C6] to-[#A5C4DC] bg-clip-text text-transparent drop-shadow-md leading-none">
+            <span className="text-[14px] font-black tracking-tight bg-gradient-to-r from-sand via-lavender to-blue bg-clip-text text-transparent drop-shadow-md leading-none">
               Diaspro
             </span>
-            <span className="text-[11px] font-extrabold tracking-[0.2em] text-[#E8D19E]/90 uppercase leading-tight mt-1">
+            <span className="text-[11px] font-extrabold tracking-[0.2em] text-sand/90 uppercase leading-tight mt-1">
               Viboard
             </span>
           </div>
@@ -92,8 +92,8 @@ export default function Sidebar({ currentTab, setCurrentTab }) {
                 onClick={() => setCurrentTab(item.id)}
                 title={item.label}
                 className={`w-13 h-13 rounded-2xl flex items-center justify-center transition-all duration-300 relative ${isActive
-                  ? 'bg-[#2b1c47] border border-[#9D85C6]/50 shadow-[0_0_15px_rgba(157,133,198,0.35)] scale-105'
-                  : 'hover:bg-[#2b1c47]/40 opacity-75 hover:opacity-100 hover:scale-105'
+                  ? 'bg-card border border-lavender/50 shadow-[0_0_15px_rgba(154,133,192,0.35)] scale-105'
+                  : 'hover:bg-card/40 opacity-75 hover:opacity-100 hover:scale-105'
                   }`}
               >
                 <Icon className="w-8 h-8 shrink-0 filter drop-shadow-sm" />

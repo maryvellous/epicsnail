@@ -74,14 +74,14 @@ export default function ProjectsView({ onNavigateTab }) {
   const [activePostItId, setActivePostItId] = useState(null);
 
   const COLOR_OPTIONS = [
-    { id: 'blue', name: 'Azzurro Cielo', bg: '#A5C4DC' },
-    { id: 'sage', name: 'Verde Salvia', bg: '#98A78A' },
-    { id: 'sand', name: 'Sabbia Dorata', bg: '#E8D19E' },
-    { id: 'lavender', name: 'Lavanda Soft', bg: '#9D85C6' },
-    { id: 'plum', name: 'Prugna Intenso', bg: '#7A3F67' },
-    { id: 'terracotta', name: 'Terracotta Caldo', bg: '#8F5A5A' },
-    { id: 'warm-sand', name: 'Sabbia Calda', bg: '#BC957D' },
-    { id: 'default', name: 'Scuro Cozy', bg: '#2b1c47' },
+    { id: 'blue', name: 'Azzurro Cielo', bg: '#a8c6de' },
+    { id: 'sage', name: 'Verde Salvia', bg: '#9ca98b' },
+    { id: 'sand', name: 'Sabbia Dorata', bg: '#efdebd' },
+    { id: 'lavender', name: 'Lavanda Soft', bg: '#9a85c0' },
+    { id: 'plum', name: 'Prugna Intenso', bg: '#833d6f' },
+    { id: 'terracotta', name: 'Terracotta Caldo', bg: '#8f5a5a' },
+    { id: 'warm-sand', name: 'Sabbia Calda', bg: '#785076' },
+    { id: 'default', name: 'Scuro Cozy', bg: '#5c2a5c' },
   ];
 
   useEffect(() => {
@@ -123,7 +123,7 @@ export default function ProjectsView({ onNavigateTab }) {
   if (loading) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center gap-4 select-none">
-        <Sparkles className="w-12 h-12 text-[#9D85C6] animate-spin" />
+        <Sparkles className="w-12 h-12 text-lavender animate-spin" />
         <span className="text-base font-bold text-white/80">Scansione dei tuoi progetti in corso...</span>
       </div>
     );
@@ -137,7 +137,7 @@ export default function ProjectsView({ onNavigateTab }) {
           <h1 className="font-heading font-black text-3xl text-white tracking-wide flex items-center gap-3.5">
             <AestheticBriefcaseIcon className="w-10 h-10 shrink-0 filter drop-shadow-md" />
             I Miei Progetti
-            <span className="badge-pill bg-[#6B5887] text-white border border-white/20 shadow-md text-xs">
+            <span className="badge-pill bg-sidebar text-white border border-white/20 shadow-md text-xs">
               {projects.length} repository
             </span>
           </h1>
@@ -150,13 +150,13 @@ export default function ProjectsView({ onNavigateTab }) {
             <select
               value={projectFilter}
               onChange={(e) => changeProjectFilter(e.target.value)}
-              className="appearance-none bg-[#2b1c47] text-white border border-[#9D85C6]/40 hover:border-[#9D85C6] rounded-2xl px-4 py-2 pr-8 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#9D85C6] cursor-pointer shadow-md"
+              className="appearance-none bg-card text-white border border-lavender/40 hover:border-lavender rounded-2xl px-4 py-2 pr-8 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-lavender cursor-pointer shadow-md"
             >
-              <option value="all" className="bg-[#1e1333] text-white">📦 Tutti i Progetti</option>
-              <option value="local_only" className="bg-[#1e1333] text-white">💻 Solo Locali</option>
-              <option value="github_only" className="bg-[#1e1333] text-white">🐙 Solo Remote GitHub</option>
+              <option value="all" className="bg-canvas text-white">📦 Tutti i Progetti</option>
+              <option value="local_only" className="bg-canvas text-white">💻 Solo Locali</option>
+              <option value="github_only" className="bg-canvas text-white">🐙 Solo Remote GitHub</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-[#E8D19E] absolute right-2.5 top-3 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-sand absolute right-2.5 top-3 pointer-events-none" />
           </div>
 
           {/* Sort Selector */}
@@ -164,14 +164,14 @@ export default function ProjectsView({ onNavigateTab }) {
             <select
               value={sortBy}
               onChange={(e) => changeSortBy(e.target.value)}
-              className="appearance-none bg-[#2b1c47] text-white border border-[#9D85C6]/40 hover:border-[#9D85C6] rounded-2xl px-4 py-2 pr-8 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#9D85C6] cursor-pointer shadow-md"
+              className="appearance-none bg-card text-white border border-lavender/40 hover:border-lavender rounded-2xl px-4 py-2 pr-8 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-lavender cursor-pointer shadow-md"
             >
-              <option value="modified_desc" className="bg-[#1e1333] text-white">Modifica (Più recenti)</option>
-              <option value="modified_asc" className="bg-[#1e1333] text-white">Modifica (Meno recenti)</option>
-              <option value="created_desc" className="bg-[#1e1333] text-white">Creazione (Più recenti)</option>
-              <option value="created_asc" className="bg-[#1e1333] text-white">Creazione (Meno recenti)</option>
+              <option value="modified_desc" className="bg-canvas text-white">Modifica (Più recenti)</option>
+              <option value="modified_asc" className="bg-canvas text-white">Modifica (Meno recenti)</option>
+              <option value="created_desc" className="bg-canvas text-white">Creazione (Più recenti)</option>
+              <option value="created_asc" className="bg-canvas text-white">Creazione (Meno recenti)</option>
             </select>
-            <ChevronDown className="w-3.5 h-3.5 text-[#E8D19E] absolute right-2.5 top-3 pointer-events-none" />
+            <ChevronDown className="w-3.5 h-3.5 text-sand absolute right-2.5 top-3 pointer-events-none" />
           </div>
 
           {/* Show Hidden Projects Toggle */}
@@ -180,8 +180,8 @@ export default function ProjectsView({ onNavigateTab }) {
               onClick={() => setShowHiddenProjects(!showHiddenProjects)}
               className={`action-pill transition-all ${
                 showHiddenProjects
-                  ? 'bg-[#E8D19E] text-[#1e1333] font-black'
-                  : 'bg-white/10 hover:bg-white/20 border border-white/20 text-[#A5C4DC]'
+                  ? 'bg-sand text-canvas font-black'
+                  : 'bg-white/10 hover:bg-white/20 border border-white/20 text-blue'
               }`}
               title="Mostra o nascondi i progetti archiviati"
             >
@@ -194,16 +194,16 @@ export default function ProjectsView({ onNavigateTab }) {
 
       {/* Empty State when no repos found */}
       {projects.length === 0 && (
-        <div className="dashboard-card bg-[#2b1c47] border border-[#7A3F67]/40 p-12 text-center flex flex-col items-center justify-center gap-4 max-w-xl mx-auto my-12 shadow-2xl">
-          <FolderOpen className="w-14 h-14 text-[#9D85C6] animate-bounce" />
+        <div className="dashboard-card bg-card border border-plum/40 p-12 text-center flex flex-col items-center justify-center gap-4 max-w-xl mx-auto my-12 shadow-2xl">
+          <FolderOpen className="w-14 h-14 text-lavender animate-bounce" />
           <h2 className="font-heading font-black text-2xl text-white">Nessun Progetto Git Trovato</h2>
-          <p className="text-sm text-[#A5C4DC] font-sans leading-relaxed">
+          <p className="text-sm text-blue font-sans leading-relaxed">
             Non abbiamo individuato repository Git nei percorsi locali configurati o nei collegamenti GitHub.
           </p>
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={refreshProjects}
-              className="action-pill bg-[#6B5887] hover:bg-[#7A3F67] text-white font-bold"
+              className="action-pill bg-sidebar hover:bg-plum text-white font-bold"
             >
               Riscansiona Progetti
             </button>
@@ -328,14 +328,14 @@ export default function ProjectsView({ onNavigateTab }) {
                         <h2
                           onClick={() => setActiveProject(project)}
                           className={`font-heading font-black text-2xl leading-snug cursor-pointer transition-opacity hover:opacity-80 break-words line-clamp-2 ${
-                            isDarkTheme ? 'text-white' : 'text-[#1e1333]'
+                            isDarkTheme ? 'text-white' : 'text-canvas'
                           }`}
                           title={customName}
                         >
                           {customName}
                         </h2>
                         {isPinned && (
-                          <span className="p-1 rounded-lg bg-[#E8D19E] text-[#1e1333] shadow-md shrink-0" title="Fissato in alto">
+                          <span className="p-1 rounded-lg bg-sand text-canvas shadow-md shrink-0" title="Fissato in alto">
                             <Pin className="w-3.5 h-3.5 fill-current" />
                           </span>
                         )}
@@ -370,7 +370,7 @@ export default function ProjectsView({ onNavigateTab }) {
                   {/* Last Modified Indicator */}
                   {formattedModDate && (
                     <div className={`flex items-center gap-1.5 text-[11px] font-semibold mt-2.5 ${
-                      isDarkTheme ? 'text-[#A5C4DC]/90' : 'text-[#1e1333]/80'
+                      isDarkTheme ? 'text-blue/90' : 'text-canvas/80'
                     }`}>
                       <Clock className="w-3.5 h-3.5 shrink-0 opacity-80" />
                       <span>{formattedModDate}</span>
@@ -383,15 +383,15 @@ export default function ProjectsView({ onNavigateTab }) {
                   {project.isLocal !== false && (
                     <span className={`badge-pill ${
                       isDarkTheme
-                        ? 'bg-[#6B5887]/60 text-[#9D85C6] border border-[#9D85C6]/40'
-                        : 'bg-[#1e1333] text-[#A5C4DC] border border-[#A5C4DC]/40 font-bold'
+                        ? 'bg-sidebar/60 text-lavender border border-lavender/40'
+                        : 'bg-canvas text-blue border border-blue/40 font-bold'
                     }`}>
                       Locale
                     </span>
                   )}
 
                   {project.isGitHubRemote && (
-                    <span className="badge-pill bg-[#1e1333] text-[#E8D19E] border border-[#E8D19E]/40">
+                    <span className="badge-pill bg-canvas text-sand border border-sand/40">
                       GitHub
                     </span>
                   )}
@@ -399,7 +399,7 @@ export default function ProjectsView({ onNavigateTab }) {
                   <span className={`badge-pill ${
                     isDarkTheme
                       ? 'bg-white/15 text-white border border-white/20'
-                      : 'bg-[#1e1333]/15 text-[#1e1333] border border-[#1e1333]/25 font-extrabold'
+                      : 'bg-canvas/15 text-canvas border border-canvas/25 font-extrabold'
                   }`}>
                     <GitBranch className="w-3.5 h-3.5 shrink-0" />
                     <span>{project.branch}</span>
@@ -407,12 +407,12 @@ export default function ProjectsView({ onNavigateTab }) {
 
                   {project.isLocal !== false && (
                     project.clean ? (
-                      <span className="badge-pill text-[#1e1333] bg-[#98A78A] border border-[#98A78A]/40 font-bold">
+                      <span className="badge-pill text-canvas bg-sage border border-sage/40 font-bold">
                         <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
                         <span>Clean</span>
                       </span>
                     ) : (
-                      <span className="badge-pill text-[#1e1333] bg-[#E8D19E] border border-[#E8D19E]/40 font-bold">
+                      <span className="badge-pill text-canvas bg-sand border border-sand/40 font-bold">
                         <AlertCircle className="w-3.5 h-3.5 shrink-0" />
                         <span>{project.modified} modificati</span>
                       </span>
@@ -420,14 +420,14 @@ export default function ProjectsView({ onNavigateTab }) {
                   )}
 
                   {project.stargazers_count !== undefined && (
-                    <span className="badge-pill text-[#E8D19E] bg-[#1e1333]/70 border border-[#E8D19E]/40" title="Stelle GitHub">
-                      <Star className="w-3.5 h-3.5 fill-[#E8D19E] text-[#E8D19E] shrink-0" />
+                    <span className="badge-pill text-sand bg-canvas/70 border border-sand/40" title="Stelle GitHub">
+                      <Star className="w-3.5 h-3.5 fill-sand text-sand shrink-0" />
                       <span>{project.stargazers_count}</span>
                     </span>
                   )}
 
                   {project.open_issues_count !== undefined && project.open_issues_count > 0 && (
-                    <span className="badge-pill text-[#8F5A5A] bg-[#1e1333]/70 border border-[#8F5A5A]/40" title="Issue aperte su GitHub">
+                    <span className="badge-pill text-terracotta bg-canvas/70 border border-terracotta/40" title="Issue aperte su GitHub">
                       <span>Issue: {project.open_issues_count}</span>
                     </span>
                   )}
@@ -446,8 +446,8 @@ export default function ProjectsView({ onNavigateTab }) {
 
                 {/* 3. Commit Block (Explicit Card Section 3) */}
                 {project.lastCommit && (
-                  <div className="card-commit-block bg-[#1e1333]/60 border border-white/10 text-white">
-                    <div className="flex items-center gap-2 text-xs font-mono font-bold mb-2 text-[#9D85C6]">
+                  <div className="card-commit-block bg-canvas/60 border border-white/10 text-white">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold mb-2 text-lavender">
                       <GitCommit className="w-3.5 h-3.5" />
                       <span>{project.lastCommit.hash}</span>
                     </div>
@@ -467,7 +467,7 @@ export default function ProjectsView({ onNavigateTab }) {
                     <button
                       onClick={() => setOpenMenuId(openMenuId === project.id ? null : project.id)}
                       className={`action-pill ${
-                        isDarkTheme ? 'bg-white text-purple-950 hover:bg-purple-100' : 'bg-[#1e1333] text-white hover:bg-purple-950'
+                        isDarkTheme ? 'bg-white text-purple-950 hover:bg-purple-100' : 'bg-canvas text-white hover:bg-purple-950'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -479,7 +479,7 @@ export default function ProjectsView({ onNavigateTab }) {
 
                     {/* Popover Dropdown Menu */}
                     {openMenuId === project.id && (
-                      <div className="absolute left-0 bottom-14 z-50 w-56 dashboard-card p-2 shadow-2xl bg-[#1e1333] text-white border-white/20 flex flex-col gap-1 animate-fadeIn">
+                      <div className="absolute left-0 bottom-14 z-50 w-56 dashboard-card p-2 shadow-2xl bg-canvas text-white border-white/20 flex flex-col gap-1 animate-fadeIn">
                         <button
                           onClick={() => {
                             launchTerminal(project.path);
@@ -542,7 +542,7 @@ export default function ProjectsView({ onNavigateTab }) {
                 {project.isGitHubRemote && project.githubUrl && (
                   <button
                     onClick={() => openExternal(project.githubUrl)}
-                    className="action-pill bg-[#6B5887] hover:bg-[#7A3F67] text-white border border-white/20"
+                    className="action-pill bg-sidebar hover:bg-plum text-white border border-white/20"
                     title="Apri repository su GitHub Web"
                   >
                     <Globe className="w-3.5 h-3.5 shrink-0" />
@@ -555,8 +555,8 @@ export default function ProjectsView({ onNavigateTab }) {
                     onClick={() => syncProject(project.path)}
                     className={`action-pill ${
                       isDarkTheme
-                        ? 'bg-white/10 hover:bg-white/20 text-[#A5C4DC] border border-white/20'
-                        : 'bg-[#1e1333]/15 hover:bg-[#1e1333]/25 text-[#1e1333] border border-[#1e1333]/30 font-extrabold'
+                        ? 'bg-white/10 hover:bg-white/20 text-blue border border-white/20'
+                        : 'bg-canvas/15 hover:bg-canvas/25 text-canvas border border-canvas/30 font-extrabold'
                     }`}
                     title="Esegui git fetch sul progetto"
                   >
@@ -570,7 +570,7 @@ export default function ProjectsView({ onNavigateTab }) {
                   className={`action-pill ${
                     isDarkTheme
                       ? 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
-                      : 'bg-black/10 hover:bg-black/20 text-[#1e1333] border border-black/20'
+                      : 'bg-black/10 hover:bg-black/20 text-canvas border border-black/20'
                   }`}
                 >
                   <span className="flex items-center gap-1.5">
@@ -587,7 +587,7 @@ export default function ProjectsView({ onNavigateTab }) {
       {/* RIGHT-CLICK CONTEXT MENU */}
       {contextMenu && (
         <div
-          className="fixed z-50 w-56 dashboard-card p-2 shadow-2xl bg-[#1e1333] text-white border-white/30 flex flex-col gap-1 animate-fadeIn"
+          className="fixed z-50 w-56 dashboard-card p-2 shadow-2xl bg-canvas text-white border-white/30 flex flex-col gap-1 animate-fadeIn"
           style={{ top: contextMenu.y, left: contextMenu.x }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -627,9 +627,9 @@ export default function ProjectsView({ onNavigateTab }) {
                 openExternal(contextMenu.project.githubUrl);
                 setContextMenu(null);
               }}
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-[#E8D19E] text-left"
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-sand text-left"
             >
-              <Globe className="w-4 h-4 text-[#E8D19E]" />
+              <Globe className="w-4 h-4 text-sand" />
               <span>Apri su GitHub Web</span>
             </button>
           )}
@@ -640,9 +640,9 @@ export default function ProjectsView({ onNavigateTab }) {
                 syncProject(contextMenu.project.path);
                 setContextMenu(null);
               }}
-              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-[#A5C4DC] text-left"
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-blue text-left"
             >
-              <RefreshCw className="w-4 h-4 text-[#A5C4DC]" />
+              <RefreshCw className="w-4 h-4 text-blue" />
               <span>Sincronizza Git (Fetch)</span>
             </button>
           )}
@@ -652,7 +652,7 @@ export default function ProjectsView({ onNavigateTab }) {
               togglePinProject(contextMenu.project.id);
               setContextMenu(null);
             }}
-            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-[#E8D19E] text-left"
+            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-sand text-left"
           >
             <Pin className="w-4 h-4" />
             <span>{pinnedProjectIds.includes(contextMenu.project.id) ? 'Sblocca / Unpinna Progetto' : 'Pinna in Alto'}</span>
@@ -678,7 +678,7 @@ export default function ProjectsView({ onNavigateTab }) {
               }
               setContextMenu(null);
             }}
-            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-[#A5C4DC] text-left"
+            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-blue text-left"
           >
             <Plus className="w-4 h-4" />
             <span>Aggiungi Task Post-it</span>
@@ -702,9 +702,9 @@ export default function ProjectsView({ onNavigateTab }) {
                 onNavigateTab('chat');
               }
             }}
-            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-[#E8D19E] text-left border-t border-white/10 mt-1 pt-2"
+            className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white/15 text-xs font-bold text-sand text-left border-t border-white/10 mt-1 pt-2"
           >
-            <Bot className="w-4 h-4 text-[#E8D19E]" />
+            <Bot className="w-4 h-4 text-sand" />
             <span>Apri come contesto nel Chatbot</span>
           </button>
 

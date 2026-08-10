@@ -59,10 +59,10 @@ export default function StickyNote({ id, text, x, y, rotation, onUpdate, onDelet
       {/* Paper */}
       <div
         style={{
-          background: 'rgba(232, 209, 158, 0.93)',
-          border: '1px solid rgba(188, 149, 125, 0.55)',
+          background: 'rgba(239, 222, 189, 0.93)',
+          border: '1px solid rgba(120, 80, 118, 0.55)',
           borderRadius: 14,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(157,133,198,0.18)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.35), 0 2px 8px rgba(154,133,192,0.18)',
           padding: '10px 12px 12px',
           display: 'flex',
           flexDirection: 'column',
@@ -78,14 +78,14 @@ export default function StickyNote({ id, text, x, y, rotation, onUpdate, onDelet
               border: 'none',
               padding: 2,
               cursor: 'pointer',
-              color: 'rgba(59,44,15,0.4)',
+              color: 'rgba(30,19,51,0.4)',
               display: 'flex',
               alignItems: 'center',
               borderRadius: 6,
               transition: 'color 0.2s',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#8F5A5A')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(59,44,15,0.4)')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#8f5a5a')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(30,19,51,0.4)')}
             title="Elimina nota"
           >
             <X size={14} strokeWidth={2.5} />
@@ -108,7 +108,7 @@ export default function StickyNote({ id, text, x, y, rotation, onUpdate, onDelet
             fontFamily: "'JetBrains Mono', monospace",
             fontSize: 12,
             fontWeight: 600,
-            color: '#3b2c0f',
+            color: '#1e1333',
             lineHeight: 1.6,
             width: '100%',
             minHeight: 100,
