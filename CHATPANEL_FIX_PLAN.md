@@ -104,4 +104,24 @@
 ---
 
 ## Fase 4 — Refactoring strutturale (custom hooks)
-- **Stato**: In attesa di approvazione esplicita utente dopo la revisione delle Fasi 1, 2 e 3.
+
+### 1. Dettagli Modifica
+- **File creati**:
+  - Hooks: [`src/hooks/useChatThreads.js`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/hooks/useChatThreads.js), [`src/hooks/useChatContext.js`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/hooks/useChatContext.js), [`src/hooks/usePendingActions.js`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/hooks/usePendingActions.js)
+  - UI Components: [`src/components/chat/ChatHistorySidebar.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/chat/ChatHistorySidebar.jsx), [`src/components/chat/ChatHeader.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/chat/ChatHeader.jsx), [`src/components/chat/ChatMessagesStream.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/chat/ChatMessagesStream.jsx), [`src/components/chat/ChatInputBar.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/chat/ChatInputBar.jsx)
+- **File modificato**:
+  - [`src/components/ChatPanel.jsx`](file:///c:/Users/Clark/Desktop/Cosciottina/Nuova%20cartella/src/components/ChatPanel.jsx)
+
+### 2. Approccio Scelto & Motivazione
+- **Approccio**: Decomposizione in custom hooks per ciascun ambito di responsabilità (`threads`, `context`, `pendingActions`) ed estrazione di 4 sottocomponenti di vista UI.
+- **Motivazione**: Riduce le dimensioni di `ChatPanel.jsx` da circa 900 a circa 270 righe, migliorando significativamente leggibilità, manutenibilità e testabilità senza intaccare le funzionalità verificate.
+
+### 3. Risultati della Verifica
+- **`npx vitest run`**: PASS (14/14 test passati a 0 errori).
+- **`npm run build`**: PASS (Build completata con successo in 4.45s).
+
+### 4. Criteri di Completamento
+- [x] Refactoring completato con successo.
+- [x] Tutti i test di regressione sono superati.
+- [x] Build di produzione esguita senza errori.
+
