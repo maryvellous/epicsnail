@@ -22,4 +22,10 @@ export default defineConfig({
       '@': path.resolve(process.cwd(), './src'),
     },
   },
+  test: {
+    environment: 'node',
+    environmentMatchGlobs: [
+      ['src/__tests__/ChatPanelIntegration.test.jsx', 'jsdom'],
+    ],
+  },
 });

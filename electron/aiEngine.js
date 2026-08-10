@@ -292,6 +292,63 @@ class AIEngine {
       } else {
         // Read-only tool auto execution
         const toolResult = await this.executeTool(toolName, params);
+
+        try {
+          const responsePayload = (typeof toolResult === 'object' && toolResult !== null && !Array.isArray(toolResult))
+            ? toolResult
+            : { result: toolResult };
+
+          const followUpContents = [
+            ...formattedContents,
+            candidate.content || {
+              role: 'model',
+              parts: [{ functionCall }]
+            },
+            {
+              role: 'user',
+              parts: [{
+                functionResponse: {
+                  name: toolName,
+                  response: responsePayload
+                }
+              }]
+            }
+          ];
+
+          const res2 = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: followUpContents,
+              systemInstruction,
+              tools
+            })
+          });
+
+          if (res2.ok) {
+            const data2 = await res2.json();
+            const candidate2 = data2.candidates?.[0];
+            const parts2 = candidate2?.content?.parts || [];
+
+            let text2 = '';
+            let secondFunctionCall = null;
+
+            for (const part of parts2) {
+              if (part.text) text2 += part.text;
+              if (part.functionCall) secondFunctionCall = part.functionCall;
+            }
+
+            if (secondFunctionCall) {
+              console.warn('[AIEngine] Follow-up response contained unexpected tool call, falling back');
+              if (text2) return { success: true, text: text2 };
+            } else if (text2) {
+              return { success: true, text: text2 };
+            }
+          }
+        } catch (err) {
+          console.error('[AIEngine] Gemini follow-up call failed:', err);
+        }
+
         return {
           success: true,
           text: `[Informazioni recuperate da ${toolName}]:\n\`\`\`json\n${JSON.stringify(toolResult, null, 2)}\n\`\`\``
@@ -343,7 +400,8 @@ class AIEngine {
     const choice = data.choices?.[0]?.message;
 
     if (choice?.tool_calls && choice.tool_calls.length > 0) {
-      const toolCall = choice.tool_calls[0].function;
+      const toolCallObj = choice.tool_calls[0];
+      const toolCall = toolCallObj.function;
       const toolName = toolCall.name;
       let params = {};
       try {
@@ -365,6 +423,47 @@ class AIEngine {
         };
       } else {
         const toolResult = await this.executeTool(toolName, params);
+
+        try {
+          const followUpMessages = [
+            ...formattedMessages,
+            choice,
+            {
+              role: 'tool',
+              tool_call_id: toolCallObj.id,
+              content: JSON.stringify(toolResult)
+            }
+          ];
+
+          const res2 = await fetch(`${baseUrl}/chat/completions`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${apiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: modelTier,
+              messages: followUpMessages,
+              tools
+            })
+          });
+
+          if (res2.ok) {
+            const data2 = await res2.json();
+            const choice2 = data2.choices?.[0]?.message;
+            const text2 = choice2?.content || '';
+
+            if (choice2?.tool_calls && choice2.tool_calls.length > 0) {
+              console.warn('[AIEngine] Follow-up response contained unexpected tool call, falling back');
+              if (text2) return { success: true, text: text2 };
+            } else if (text2) {
+              return { success: true, text: text2 };
+            }
+          }
+        } catch (err) {
+          console.error('[AIEngine] OpenAI/DeepSeek follow-up call failed:', err);
+        }
+
         return {
           success: true,
           text: `[Dati recuperati tramite ${toolName}]:\n\`\`\`json\n${JSON.stringify(toolResult, null, 2)}\n\`\`\``
@@ -477,15 +576,24 @@ class AIEngine {
           if (res2.ok) {
             const data2 = await res2.json();
             let text2 = '';
+            let secondToolUse = null;
+
             if (data2.content && Array.isArray(data2.content)) {
               for (const block of data2.content) {
                 if (block.type === 'text') text2 += block.text;
+                if (block.type === 'tool_use') secondToolUse = block;
               }
             }
-            if (text2) return { success: true, text: text2 };
+
+            if (secondToolUse) {
+              console.warn('[AIEngine] Follow-up response contained unexpected tool call, falling back');
+              if (text2) return { success: true, text: text2 };
+            } else if (text2) {
+              return { success: true, text: text2 };
+            }
           }
         } catch (err) {
-          // Fallback to raw tool output if follow-up call fails
+          console.error('[AIEngine] Anthropic follow-up call failed:', err);
         }
 
         return {
