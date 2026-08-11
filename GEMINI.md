@@ -19,3 +19,8 @@
 - **Collection Source**: [SVGRepo - Responsive Flat Icons](https://www.svgrepo.com/collection/responsive-flat-icons/2)
 - **Local Storage Path**: `src/assets/icons/` (e cartella di backup `aesteticvibe/`)
 - All app icons should be sourced from this collection or rendered via `AestheticIcons.jsx`.
+
+## Component & Hook Refactoring Rules
+- **Guardia `window.electronAPI` Obbligatoria per Hook IPC**: Tutti i custom hook che interagiscono con il backend Electron devono racchiudere le chiamate IPC in guardie `if (window.electronAPI)` per garantire il funzionamento senza eccezioni in ambiente Web/Demo. Ogni custom hook IPC deve avere una suite di unit test Vitest dedicata (`// @vitest-environment jsdom` con mock di `window.electronAPI`).
+- **Verifica Duale (`npm test` + `npm run build`)**: Dopo qualsiasi estrazione o refactoring di componenti e hook, eseguire sempre sia i test unitari (`npm test`) sia la build di produzione (`npm run build`). I test unitari isolati sugli hook non catturano errori di riferimento o import mancanti nel componente padre reale che non viene montato dai test unitari.
+
