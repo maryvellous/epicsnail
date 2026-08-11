@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup Wireframe - Restyling Schermata Impostazioni (Stile Calendario 10 Giorni)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #1e1333;
+      --bg-card: #2b1c47;
+      --color-sidebar: #6e5a8e;
+      --color-lavender: #9a85c0;
+      --color-plum: #833d6f;
+      --color-plum-muted: #785076;
+      --color-sand: #efdebd;
+      --color-blue: #a8c6de;
+      --color-sage: #9ca98b;
+      --color-terracotta: #8f5a5a;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-heading { font-family: 'Outfit', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    .dashboard-card {
+      background-color: var(--bg-card);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(154, 133, 192, 0.2);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .setting-nav-card {
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .setting-nav-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(154, 133, 192, 0.6);
+    }
+    .setting-nav-card.active {
+      background-color: var(--color-plum);
+      border-color: var(--color-sand);
+      box-shadow: 0 8px 24px -4px rgba(131, 61, 111, 0.6);
+    }
+
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(154, 133, 192, 0.3); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(154, 133, 192, 0.6); }
+  </style>
+</head>
+<body class="p-6 md:p-12 select-none">
+
+  <div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- HEADER SETTINGS VIEW -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div>
+        <h1 class="font-heading font-black text-3xl text-white flex items-center gap-3">
+          <svg class="w-8 h-8 text-[#9a85c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+          Impostazioni & Connessioni
+        </h1>
+        <p class="text-xs text-[#a8c6de] mt-1 font-sans">
+          Restyling con Selettore di Schede a Card (Ispirato al sistema Calendario 10 Giorni)
+        </p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-mono text-[#9ca98b] bg-[#9ca98b]/20 px-3 py-1.5 rounded-full border border-[#9ca98b]/40">
+          ● Sistema Pronto
+        </span>
+      </div>
+    </div>
+
+    <!-- STRISCIA DI SCHEDE CARD (ISPIRATA AI 10 GIORNI DEL CALENDARIO) -->
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h2 class="font-heading font-bold text-sm text-[#efdebd] uppercase tracking-wider">
+          Seleziona Categoria Impostazioni
+        </h2>
+        <span class="text-xs font-mono text-[#a8c6de]">Clicca su una card per accedere al pannello</span>
+      </div>
+
+      <!-- STRISCIA HORIZONTALE / GRID DI 5 CARD DI NAVIGAZIONE -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+
+        <!-- CARD 1: GOOGLE MASTER -->
+        <div id="card-nav-google" onclick="selectCategory('google')" class="setting-nav-card active p-4 rounded-2xl bg-[#2b1c47] border border-white/10 flex flex-col justify-between h-32">
+          <div class="flex items-center justify-between">
+            <svg class="w-6 h-6 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+            <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/40">Attivo</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-sm text-white">Google Master</h3>
+            <p class="text-[10px] font-mono text-[#a8c6de] mt-0.5 truncate">Workspace & Calendar</p>
+          </div>
+        </div>
+
+        <!-- CARD 2: GAMIFICATION & XP -->
+        <div id="card-nav-gamification" onclick="selectCategory('gamification')" class="setting-nav-card p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between h-32">
+          <div class="flex items-center justify-between">
+            <svg class="w-6 h-6 text-[#9a85c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#833d6f]/40 text-[#efdebd] border border-[#efdebd]/30">Livello 4</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-sm text-white">Gamification XP</h3>
+            <p class="text-[10px] font-mono text-[#a8c6de] mt-0.5 truncate">Regole & Difficoltà</p>
+          </div>
+        </div>
+
+        <!-- CARD 3: IA & BYOK -->
+        <div id="card-nav-ai" onclick="selectCategory('ai')" class="setting-nav-card p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between h-32">
+          <div class="flex items-center justify-between">
+            <svg class="w-6 h-6 text-[#a8c6de]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#9a85c0]/30 text-[#9a85c0] border border-[#9a85c0]/40">Gemini 1.5</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-sm text-white">Provider IA</h3>
+            <p class="text-[10px] font-mono text-[#a8c6de] mt-0.5 truncate">BYOK API Key</p>
+          </div>
+        </div>
+
+        <!-- CARD 4: HUB CONNESSIONI -->
+        <div id="card-nav-connections" onclick="selectCategory('connections')" class="setting-nav-card p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between h-32">
+          <div class="flex items-center justify-between">
+            <svg class="w-6 h-6 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+            <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-white/10 text-white/70 border border-white/10">3 App</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-sm text-white">Hub Connessioni</h3>
+            <p class="text-[10px] font-mono text-[#a8c6de] mt-0.5 truncate">Spotify, Pinterest, GitHub</p>
+          </div>
+        </div>
+
+        <!-- CARD 5: PERCORSI DISCO -->
+        <div id="card-nav-paths" onclick="selectCategory('paths')" class="setting-nav-card p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between h-32">
+          <div class="flex items-center justify-between">
+            <svg class="w-6 h-6 text-[#8f5a5a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+            <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#8f5a5a]/30 text-[#efdebd] border border-[#8f5a5a]/40">2 Cartelle</span>
+          </div>
+          <div>
+            <h3 class="font-heading font-bold text-sm text-white">Percorsi Scansione</h3>
+            <p class="text-[10px] font-mono text-[#a8c6de] mt-0.5 truncate">Cartelle Progetti Locali</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AREA DI DETTAGLIO DELLA CARD SELEZIONATA (PANNELLO ESPANSO DINAMICO) -->
+    <div id="detail-panel-container" class="dashboard-card border-[#9a85c0]/30 min-h-[380px] transition-all">
+      
+      <!-- GOOGLE MASTER PANEL (DEFAULT ACTIVE) -->
+      <div id="panel-google" class="space-y-6">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+              <svg class="w-6 h-6 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path></svg>
+              Account Google Master
+            </h2>
+            <p class="text-xs text-[#a8c6de] mt-0.5">Gestione autenticazione OAuth 2.0 unificata per Workspace, Calendar e Tasks</p>
+          </div>
+          <span class="text-xs font-mono text-[#9ca98b] bg-[#9ca98b]/20 px-3 py-1 rounded-full border border-[#9ca98b]/40">Connesso</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-5 rounded-2xl bg-[#1e1333] border border-white/10 space-y-3">
+            <h3 class="font-heading font-bold text-sm text-[#efdebd]">Stato Account Attivo</h3>
+            <div class="p-3 bg-[#2b1c47] rounded-xl border border-white/10 font-mono text-xs">
+              <p class="text-white/60 text-[10px]">EMAIL ACCOUNT GOOGLE:</p>
+              <p class="text-white font-semibold text-sm truncate mt-0.5">clark.kent@gmail.com</p>
+            </div>
+            <p class="text-xs text-[#a8c6de] leading-relaxed">
+              Google Workspace è collegato con permessi in lettura e scrittura per la tua agenda 10 giorni e le tue task.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between">
+            <div>
+              <h3 class="font-heading font-bold text-sm text-[#efdebd] mb-2">Azioni Account</h3>
+              <p class="text-xs text-[#a8c6de] leading-relaxed">
+                Puoi disconnettere l'account o aggiornare le tue credenziali OAuth custom in qualsiasi momento.
+              </p>
+            </div>
+            <div class="flex gap-3 mt-4">
+              <button onclick="alert('Disconnessione account simulata')" class="action-pill bg-white/10 hover:bg-white/20 text-white border border-white/10 flex-1 justify-center">
+                <span>Disconnetti Google</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAMIFICATION PANEL -->
+      <div id="panel-gamification" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+              <svg class="w-6 h-6 text-[#9a85c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+              Gamification & Regole XP
+            </h2>
+            <p class="text-xs text-[#a8c6de] mt-0.5">Configura i punti XP assegnati per la produttività e la difficoltà</p>
+          </div>
+          <span class="text-xs font-mono text-[#efdebd] bg-[#833d6f]/40 px-3 py-1 rounded-full border border-[#efdebd]/30">Livello 4</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 text-xs space-y-1">
+            <span class="font-mono text-[#a8c6de]">Completa Task Project</span>
+            <p class="font-bold text-lg text-white">+50 XP</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 text-xs space-y-1">
+            <span class="font-mono text-[#a8c6de]">Evento Google Aggiunto</span>
+            <p class="font-bold text-lg text-white">+15 XP</p>
+          </div>
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 text-xs space-y-1">
+            <span class="font-mono text-[#a8c6de]">Task Google Spuntata</span>
+            <p class="font-bold text-lg text-white">+20 XP</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI PROVIDER PANEL -->
+      <div id="panel-ai" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+              <svg class="w-6 h-6 text-[#a8c6de]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+              Provider Intelligenza Artificiale (BYOK)
+            </h2>
+            <p class="text-xs text-[#a8c6de] mt-0.5">Configura Gemini 1.5 Flash / Pro con la tua API Key personalizzata</p>
+          </div>
+          <span class="text-xs font-mono text-[#9ca98b] bg-[#9ca98b]/20 px-3 py-1 rounded-full border border-[#9ca98b]/40">API Key Valida</span>
+        </div>
+
+        <div class="space-y-4 max-w-xl">
+          <div>
+            <label class="block text-xs font-mono text-[#efdebd] mb-2 uppercase">Chiave API Gemini (BYOK):</label>
+            <input type="password" value="AIzaSyA1234567890abcdefghijklmnopqrstuv" class="w-full bg-[#1e1333] border border-white/15 text-white text-sm font-mono rounded-2xl px-4 py-3 focus:outline-none focus:border-[#9a85c0]">
+          </div>
+          <button onclick="alert('API Key salvata e testata con successo!')" class="action-pill bg-[#9a85c0] hover:bg-[#6e5a8e] text-white">
+            <span>Salva & Verifica Key</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- HUB CONNESSIONI PANEL -->
+      <div id="panel-connections" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+              <svg class="w-6 h-6 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+              Hub Connessioni Esterne
+            </h2>
+            <p class="text-xs text-[#a8c6de] mt-0.5">Integrazioni con Spotify, Pinterest e GitHub API</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white text-sm">Spotify</p>
+              <span class="text-[10px] font-mono text-[#9ca98b]">Connesso</span>
+            </div>
+            <button class="text-xs font-mono text-[#9a85c0] hover:underline">Gestisci</button>
+          </div>
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white text-sm">Pinterest</p>
+              <span class="text-[10px] font-mono text-[#9ca98b]">Connesso</span>
+            </div>
+            <button class="text-xs font-mono text-[#9a85c0] hover:underline">Gestisci</button>
+          </div>
+          <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex justify-between items-center">
+            <div>
+              <p class="font-bold text-white text-sm">GitHub Token</p>
+              <span class="text-[10px] font-mono text-[#9ca98b]">Configurato</span>
+            </div>
+            <button class="text-xs font-mono text-[#9a85c0] hover:underline">Gestisci</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERCORSI DISCO PANEL -->
+      <div id="panel-paths" class="space-y-6 hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+          <div>
+            <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+              <svg class="w-6 h-6 text-[#8f5a5a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002-2H5a2 2 0 00-2 2z"></path></svg>
+              Percorsi di Scansione Progetti
+            </h2>
+            <p class="text-xs text-[#a8c6de] mt-0.5">Cartelle locali sul tuo disco scansionate per rilevare progetti e repository</p>
+          </div>
+        </div>
+
+        <div class="space-y-2 font-mono text-xs">
+          <div class="p-3 bg-[#1e1333] rounded-xl border border-white/10 text-white flex justify-between items-center">
+            <span>C:\Users\Clark\Desktop\Cosciottina</span>
+            <span class="text-[#9ca98b] text-[10px]">Attiva</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    function selectCategory(cat) {
+      const categories = ['google', 'gamification', 'ai', 'connections', 'paths'];
+      
+      categories.forEach(c => {
+        const navCard = document.getElementById('card-nav-' + c);
+        const panel = document.getElementById('panel-' + c);
+
+        if (c === cat) {
+          navCard.className = "setting-nav-card active p-4 rounded-2xl bg-[#833d6f] border border-[#efdebd] flex flex-col justify-between h-32 shadow-lg";
+          panel.classList.remove('hidden');
+        } else {
+          navCard.className = "setting-nav-card p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex flex-col justify-between h-32 hover:border-[#9a85c0]/60";
+          panel.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

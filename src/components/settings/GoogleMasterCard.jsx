@@ -31,65 +31,84 @@ export function GoogleMasterCard({
       </div>
 
       {googleStatus.status === 'connected' ? (
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center justify-between p-4 bg-canvas rounded-2xl border border-white/10">
-            <div className="flex items-center gap-3.5">
-              {googleStatus.avatarUrl ? (
-                <img src={googleStatus.avatarUrl} alt="Avatar" className="w-11 h-11 rounded-full border-2 border-sand" />
-              ) : (
-                <div className="w-11 h-11 rounded-full bg-sand/20 flex items-center justify-center border border-sand/40">
-                  <AestheticIdCardIcon className="w-6 h-6 text-sand" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* CARD 1: ACCOUNT PROFILE */}
+          <div className="bg-canvas p-5 rounded-2xl border border-sand/30 flex flex-col justify-between gap-4">
+            <div>
+              <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider block mb-3">
+                1. Profilo Utente Google
+              </label>
+              <div className="flex items-center gap-3.5">
+                {googleStatus.avatarUrl ? (
+                  <img src={googleStatus.avatarUrl} alt="Avatar" className="w-10 h-10 rounded-full border-2 border-sand" />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-sand/20 flex items-center justify-center border border-sand/40 shrink-0">
+                    <AestheticIdCardIcon className="w-5 h-5 text-sand" />
+                  </div>
+                )}
+                <div className="truncate">
+                  <p className="font-bold text-sm text-white truncate">{googleStatus.userName || userName || 'Utente Workspace'}</p>
+                  <p className="text-[11px] font-mono text-sand truncate">{googleStatus.userEmail || 'account@google.com'}</p>
                 </div>
-              )}
-              <div>
-                <p className="font-bold text-sm text-white">{googleStatus.userName || userName || 'Utente Workspace'}</p>
-                <p className="text-xs font-mono text-sand">{googleStatus.userEmail || 'account@google.com'}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <p className="text-[10px] font-mono text-white/50">
+              L'Account Google costituisce l'identita master per l'Hub Workspace ed il contesto di Diaspro AI.
+            </p>
+          </div>
+
+          {/* CARD 2: WORKSPACE SERVICES */}
+          <div className="bg-canvas p-5 rounded-2xl border border-sand/30 flex flex-col justify-between gap-3">
+            <div>
+              <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider block mb-2">
+                2. Servizi Integrati
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { name: 'Calendar', status: 'Attivo', color: 'text-sage border-sage/40' },
+                  { name: 'Tasks', status: 'Attivo', color: 'text-sage border-sage/40' },
+                  { name: 'Drive', status: 'Integrazione v3', color: 'text-blue border-blue/40' },
+                  { name: 'Docs', status: 'Integrazione v3', color: 'text-blue border-blue/40' },
+                ].map((srv, idx) => (
+                  <div key={idx} className="p-2 bg-card rounded-xl border border-white/10 flex flex-col justify-between">
+                    <span className="text-[11px] font-bold text-white truncate">{srv.name}</span>
+                    <span className={`text-[9px] font-mono ${srv.color} block`}>{srv.status}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* CARD 3: ACCOUNT ACTIONS */}
+          <div className="bg-canvas p-5 rounded-2xl border border-sand/30 flex flex-col justify-between gap-3">
+            <div>
+              <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider block mb-2">
+                3. Gestione Connessione
+              </label>
+              <p className="text-xs text-white/70 leading-relaxed mb-3">
+                Token OAuth 2.0 attivo. Puoi rinfrescare i permessi o disconnettere l'account.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2">
               <button
                 onClick={handleStartGoogleOAuth}
                 disabled={connectingGoogle}
-                className="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-mono font-bold text-sand border border-sand/30 transition-all"
+                className="action-pill bg-sand hover:bg-sand/80 text-canvas font-bold text-xs py-2 justify-center w-full shadow-md"
               >
                 {connectingGoogle ? 'Aggiornamento...' : 'Rinfresca Permessi'}
               </button>
               <button
                 onClick={handleDisconnectGoogle}
-                className="px-3 py-2 rounded-xl bg-rose-950/60 hover:bg-rose-900 border border-rose-500/40 text-rose-300 text-xs font-mono font-bold transition-all"
+                className="action-pill bg-canvas hover:bg-card border border-rose-500/40 text-rose-300 text-xs py-1.5 justify-center w-full"
               >
-                Disconnetti
+                Disconnetti Account
               </button>
             </div>
           </div>
-
-          {/* Workspace Services Grid */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider">
-              Servizi Workspace Integrati
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {[
-                { name: 'Google Calendar', status: 'Attivo', color: 'text-sage border-sage/40' },
-                { name: 'Google Tasks', status: 'Attivo', color: 'text-sage border-sage/40' },
-                { name: 'Google Drive', status: 'Integrazione v3', color: 'text-blue border-blue/40' },
-                { name: 'Google Docs', status: 'Integrazione v3', color: 'text-blue border-blue/40' },
-                { name: 'Google Keep', status: 'Integrazione v3', color: 'text-blue border-blue/40' },
-              ].map((srv, idx) => (
-                <div key={idx} className="p-2.5 bg-canvas rounded-xl border border-white/10 flex flex-col justify-between">
-                  <span className="text-xs font-bold text-white">{srv.name}</span>
-                  <span className={`text-[10px] font-mono ${srv.color} mt-1 block`}>{srv.status}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <p className="text-[11px] text-white/60 font-mono bg-black/20 p-3 rounded-xl border border-white/5">
-            L'Account Google costituisce l'identita master per l'Hub Workspace ed il contesto di Diaspro AI.
-          </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-3 items-center text-center p-4">
+        <div className="flex flex-col gap-3 items-center text-center p-6 bg-canvas rounded-2xl border border-sand/30">
           <p className="text-xs text-white/80">
             Nessun Account Google attualmente collegato. Collega il tuo account per attivare la suite di strumenti.
           </p>

@@ -29,6 +29,7 @@ class OAuthManager {
 
     const { verifier, challenge } = this.generatePKCE();
     const stateToken = crypto.randomBytes(16).toString('hex');
+
     const scopes = [
       'https://www.googleapis.com/auth/calendar.events',
       'https://www.googleapis.com/auth/tasks',

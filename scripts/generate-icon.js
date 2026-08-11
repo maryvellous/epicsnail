@@ -15,7 +15,7 @@ app.whenReady().then(async () => {
     }
   });
 
-  const svgPath = path.join(__dirname, '../src/assets/icona-statica-trasparente.svg');
+  const svgPath = path.join(__dirname, '../src/assets/icona-V-trasparente.svg');
   const svgData = fs.readFileSync(svgPath, 'utf8');
   const html = `<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;overflow:hidden;background:transparent !important;}</style></head><body>${svgData}</body></html>`;
 

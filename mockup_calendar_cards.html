@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup Wireframe - Calendario 10 Giorni a Card System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-canvas: #1e1333;
+      --bg-card: #2b1c47;
+      --color-sidebar: #6e5a8e;
+      --color-lavender: #9a85c0;
+      --color-plum: #833d6f;
+      --color-plum-muted: #785076;
+      --color-sand: #efdebd;
+      --color-blue: #a8c6de;
+      --color-sage: #9ca98b;
+      --color-terracotta: #8f5a5a;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-heading { font-family: 'Outfit', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    .dashboard-card {
+      background-color: var(--bg-card);
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid rgba(154, 133, 192, 0.2);
+      box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .dashboard-card:hover {
+      border-color: rgba(154, 133, 192, 0.4);
+      box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.7);
+    }
+
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .day-pill {
+      transition: all 0.2s ease;
+    }
+    .day-pill:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(154, 133, 192, 0.3); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(154, 133, 192, 0.6); }
+  </style>
+</head>
+<body class="p-6 md:p-12 select-none">
+
+  <!-- MOCKUP CONTAINER -->
+  <div class="max-w-7xl mx-auto space-y-8">
+
+    <!-- HEADER VIEW -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+      <div>
+        <h1 class="font-heading font-black text-3xl text-white flex items-center gap-3">
+          <svg class="w-8 h-8 text-[#9a85c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          Google Workspace & Agenda 10 Giorni
+        </h1>
+        <p class="text-xs text-[#a8c6de] mt-1 font-sans">
+          Architettura a Card modulari sincronizzate con Google Calendar & Tasks
+        </p>
+      </div>
+
+      <!-- VIEW MODE TOGGLE & REFRESH -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center p-1 bg-[#2b1c47] rounded-2xl border border-white/10 shadow-md">
+          <button id="btn-ten-days" onclick="switchView('tenDays')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all bg-[#9a85c0] text-white shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+            <span>Vista 10 Giorni</span>
+          </button>
+          <button id="btn-today" onclick="switchView('today')" class="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all text-white/70 hover:text-white">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span>Programma Oggi</span>
+          </button>
+        </div>
+
+        <button class="p-2.5 rounded-full bg-[#2b1c47] border border-white/10 text-white/70 hover:text-white transition-all" title="Aggiorna Dati">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- BALANCED 2-COLUMN GRID LAYOUT -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+
+      <!-- LEFT COLUMN: TIMELINE & CREAZIONE EVENTI -->
+      <div class="flex flex-col gap-8">
+
+        <!-- CARD 1: QUICK ADD EVENT CARD -->
+        <div class="dashboard-card border-[#9a85c0]/30">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-heading font-bold text-base text-[#efdebd] flex items-center gap-2">
+              <svg class="w-4 h-4 text-[#9a85c0]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+              Creazione Rapida Evento
+            </h2>
+            <span class="text-[10px] font-mono font-bold text-[#efdebd] bg-[#833d6f]/40 px-2.5 py-1 rounded-full border border-[#efdebd]/20">
+              +15 XP
+            </span>
+          </div>
+          <form onsubmit="event.preventDefault(); alert('Evento simulato aggiunto!');" class="flex flex-col sm:flex-row gap-3">
+            <input type="text" placeholder="Titolo evento..." value="Sprint Review & Demo" class="flex-1 bg-[#1e1333] border border-white/15 text-white text-sm font-semibold rounded-2xl px-4 py-2.5 placeholder-white/40 focus:outline-none focus:border-[#9a85c0]">
+            <input type="text" placeholder="Ora (es. 15:30)" value="15:30" class="w-full sm:w-32 bg-[#1e1333] border border-white/15 text-white text-sm font-semibold rounded-2xl px-4 py-2.5 placeholder-white/40 focus:outline-none focus:border-[#9a85c0]">
+            <button type="submit" class="action-pill bg-[#9a85c0] hover:bg-[#6e5a8e] text-white shrink-0 justify-center">
+              <span>+ Aggiungi</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- CARD 2: TEN DAYS OVERVIEW CARD (o TODAY AGENDA CARD) -->
+        <div id="view-container">
+
+          <!-- MODE 1: VISTA 10 GIORNI (DEFAULT) -->
+          <div id="ten-days-card" class="dashboard-card border-[#833d6f]/40 relative overflow-hidden">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+                <svg class="w-5 h-5 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                Panoramica 10 Giorni
+              </h2>
+              <span class="text-xs font-mono text-[#a8c6de] bg-[#1e1333] px-3 py-1 rounded-full border border-white/10">
+                Seleziona un giorno per i dettagli
+              </span>
+            </div>
+
+            <!-- 10 DAYS GRID / STRIP (2 COLONNE / GRID) -->
+            <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 mb-2">
+              
+              <!-- DAY 1 (OGGI) -->
+              <div onclick="openDayDetail('Oggi - 11 Ago', ['10:00 Daily Standup', '15:30 Sprint Review & Demo', '18:00 Sync Frontend'])" class="day-pill p-3 rounded-2xl bg-[#833d6f]/60 border border-[#efdebd] cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">MAR</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">11 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">3 ev</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[10px] font-semibold text-white/90 truncate">&bull; 10:00 Daily</div>
+                  <div class="text-[10px] font-semibold text-white/90 truncate">&bull; 15:30 Demo</div>
+                </div>
+              </div>
+
+              <!-- DAY 2 (DOMANI) -->
+              <div onclick="openDayDetail('Mercoledì - 12 Ago', ['11:00 Refinement', '16:00 Code Review'])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">MER</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">12 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">2 ev</span>
+                </div>
+                <div class="space-y-1">
+                  <div class="text-[10px] font-semibold text-white/80 truncate">&bull; 11:00 Refinement</div>
+                  <div class="text-[10px] font-semibold text-white/80 truncate">&bull; 16:00 Review</div>
+                </div>
+              </div>
+
+              <!-- DAY 3 -->
+              <div onclick="openDayDetail('Giovedì - 13 Ago', [])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28 opacity-80">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">GIO</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">13 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-black/30 text-white/40 border border-white/10">0 ev</span>
+                </div>
+                <span class="text-[10px] font-mono text-white/30 italic block">Libero</span>
+              </div>
+
+              <!-- DAY 4 -->
+              <div onclick="openDayDetail('Venerdì - 14 Ago', ['09:30 Retro Team'])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">VEN</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">14 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">1 ev</span>
+                </div>
+                <div class="text-[10px] font-semibold text-white/80 truncate">&bull; Retro Team</div>
+              </div>
+
+              <!-- DAY 5 -->
+              <div onclick="openDayDetail('Sabato - 15 Ago', [])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28 opacity-80">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">SAB</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">15 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-black/30 text-white/40 border border-white/10">0 ev</span>
+                </div>
+                <span class="text-[10px] font-mono text-white/30 italic block">Festa</span>
+              </div>
+
+              <!-- DAY 6 -->
+              <div onclick="openDayDetail('Domenica - 16 Ago', [])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28 opacity-80">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">DOM</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">16 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-black/30 text-white/40 border border-white/10">0 ev</span>
+                </div>
+                <span class="text-[10px] font-mono text-white/30 italic block">Libero</span>
+              </div>
+
+              <!-- DAY 7 -->
+              <div onclick="openDayDetail('Lunedì - 17 Ago', ['10:00 Planning Sprint 24'])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">LUN</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">17 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">1 ev</span>
+                </div>
+                <div class="text-[10px] font-semibold text-white/80 truncate">&bull; Planning</div>
+              </div>
+
+              <!-- DAY 8 -->
+              <div onclick="openDayDetail('Martedì - 18 Ago', ['14:00 Workshop AI'])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">MAR</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">18 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">1 ev</span>
+                </div>
+                <div class="text-[10px] font-semibold text-white/80 truncate">&bull; Workshop AI</div>
+              </div>
+
+              <!-- DAY 9 -->
+              <div onclick="openDayDetail('Mercoledì - 19 Ago', [])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28 opacity-80">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">MER</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">19 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-black/30 text-white/40 border border-white/10">0 ev</span>
+                </div>
+                <span class="text-[10px] font-mono text-white/30 italic block">Libero</span>
+              </div>
+
+              <!-- DAY 10 -->
+              <div onclick="openDayDetail('Giovedì - 20 Ago', ['17:00 Release 2.0'])" class="day-pill p-3 rounded-2xl bg-[#1e1333] border border-white/10 hover:border-[#9a85c0]/60 cursor-pointer flex flex-col justify-between h-28">
+                <div class="flex justify-between items-start">
+                  <div>
+                    <span class="text-[10px] font-mono uppercase font-black text-[#efdebd]">GIO</span>
+                    <span class="text-[11px] font-heading font-bold text-white block">20 Ago</span>
+                  </div>
+                  <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-full bg-[#9ca98b]/30 text-[#9ca98b] border border-[#9ca98b]/50">1 ev</span>
+                </div>
+                <div class="text-[10px] font-semibold text-white/80 truncate">&bull; Release 2.0</div>
+              </div>
+
+            </div>
+
+            <!-- OVERLAY DRAWER DI Dettaglio GIORNO -->
+            <div id="day-detail-drawer" class="hidden mt-4 p-4 rounded-2xl bg-[#833d6f]/40 border border-[#9a85c0]/40 transition-all">
+              <div class="flex items-center justify-between border-b border-white/10 pb-2 mb-3">
+                <h3 id="drawer-title" class="font-heading font-bold text-sm text-[#efdebd]">
+                  Dettagli Giorno
+                </h3>
+                <button onclick="closeDayDetail()" class="text-xs font-mono text-white/60 hover:text-white bg-black/30 px-2.5 py-1 rounded-full">
+                  Chiudi &times;
+                </button>
+              </div>
+              <div id="drawer-events-list" class="space-y-2 max-h-36 overflow-y-auto pr-1">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- MODE 2: PROGRAMMA OGGI (NASCOSTO DI DEFAULT) -->
+          <div id="today-card" class="dashboard-card border-[#833d6f]/40 hidden">
+            <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
+              <h2 class="font-heading font-bold text-xl text-white flex items-center gap-2.5">
+                <svg class="w-5 h-5 text-[#efdebd]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                Programma del Giorno (Oggi)
+              </h2>
+              <span class="text-xs font-mono font-bold text-[#a8c6de] bg-[#1e1333] px-3 py-1 rounded-full border border-white/10">
+                3 Eventi Sincronizzati
+              </span>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex items-center justify-between hover:border-[#9a85c0]/40 transition-colors">
+                <div class="flex items-center gap-3.5">
+                  <div class="p-2.5 rounded-xl bg-[#6e5a8e]/40 text-[#efdebd] border border-[#9a85c0]/30">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Daily Standup Team</h3>
+                    <span class="text-xs font-mono text-[#a8c6de]">10:00 - 10:30</span>
+                  </div>
+                </div>
+                <a href="#" onclick="alert('Apertura evento Google Calendar web'); return false;" class="text-xs font-mono text-[#9a85c0] hover:underline">
+                  Apri in Google Calendar ↗
+                </a>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex items-center justify-between hover:border-[#9a85c0]/40 transition-colors">
+                <div class="flex items-center gap-3.5">
+                  <div class="p-2.5 rounded-xl bg-[#6e5a8e]/40 text-[#efdebd] border border-[#9a85c0]/30">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Sprint Review & Demo</h3>
+                    <span class="text-xs font-mono text-[#a8c6de]">15:30 - 16:30</span>
+                  </div>
+                </div>
+                <a href="#" onclick="alert('Apertura evento Google Calendar web'); return false;" class="text-xs font-mono text-[#9a85c0] hover:underline">
+                  Apri in Google Calendar ↗
+                </a>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-[#1e1333] border border-white/10 flex items-center justify-between hover:border-[#9a85c0]/40 transition-colors">
+                <div class="flex items-center gap-3.5">
+                  <div class="p-2.5 rounded-xl bg-[#6e5a8e]/40 text-[#efdebd] border border-[#9a85c0]/30">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-white">Sync Architecture Frontend</h3>
+                    <span class="text-xs font-mono text-[#a8c6de]">18:00 - 18:45</span>
+                  </div>
+                </div>
+                <a href="#" onclick="alert('Apertura evento Google Calendar web'); return false;" class="text-xs font-mono text-[#9a85c0] hover:underline">
+                  Apri in Google Calendar ↗
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: TASKS & STATUS ACCOUNT -->
+      <div class="flex flex-col gap-8">
+
+        <!-- CARD 3: GOOGLE TASKS INTERACTIVE CARD -->
+        <div class="dashboard-card border-[#9ca98b]/40">
+          <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            <h2 class="font-heading font-bold text-base text-[#efdebd] flex items-center gap-2">
+              <svg class="w-5 h-5 text-[#9ca98b]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Google Tasks (<span id="task-count">2</span>)
+            </h2>
+            <span class="text-[10px] font-mono text-[#9ca98b] bg-[#9ca98b]/20 px-2.5 py-1 rounded-full border border-[#9ca98b]/30">
+              Sincronizzato
+            </span>
+          </div>
+
+          <!-- TASK LIST -->
+          <div class="space-y-2.5 max-h-56 overflow-y-auto pr-1 mb-4">
+
+            <div class="p-3 rounded-xl bg-[#1e1333] border border-white/10 text-xs flex items-center justify-between gap-3 group hover:border-[#9ca98b]/50 transition-all">
+              <label class="flex items-center gap-3 flex-1 cursor-pointer">
+                <input type="checkbox" onchange="toggleTask(this)" class="w-4 h-4 rounded accent-[#9ca98b] cursor-pointer">
+                <span class="font-semibold text-white group-has-[:checked]:line-through group-has-[:checked]:text-white/40">Aggiornare documentazione API OAuth</span>
+              </label>
+              <button onclick="alert('Task posticipato a domani (+5 XP)');" class="text-[10px] font-mono text-[#a8c6de] hover:text-white bg-white/5 hover:bg-white/10 px-2 py-1 rounded-lg border border-white/10 shrink-0">
+                Domani &rarr;
+              </button>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[#1e1333] border border-white/10 text-xs flex items-center justify-between gap-3 group hover:border-[#9ca98b]/50 transition-all">
+              <label class="flex items-center gap-3 flex-1 cursor-pointer">
+                <input type="checkbox" onchange="toggleTask(this)" class="w-4 h-4 rounded accent-[#9ca98b] cursor-pointer">
+                <span class="font-semibold text-white group-has-[:checked]:line-through group-has-[:checked]:text-white/40">Preparare slide per la presentazione</span>
+              </label>
+              <button onclick="alert('Task posticipato a domani (+5 XP)');" class="text-[10px] font-mono text-[#a8c6de] hover:text-white bg-white/5 hover:bg-white/10 px-2 py-1 rounded-lg border border-white/10 shrink-0">
+                Domani &rarr;
+              </button>
+            </div>
+
+            <div class="p-3 rounded-xl bg-[#1e1333] border border-white/10 text-xs flex items-center justify-between gap-3 group opacity-50">
+              <label class="flex items-center gap-3 flex-1 cursor-pointer">
+                <input type="checkbox" checked onchange="toggleTask(this)" class="w-4 h-4 rounded accent-[#9ca98b] cursor-pointer">
+                <span class="font-semibold text-white line-through text-white/40">Inviare recap meeting settimanale</span>
+              </label>
+              <span class="text-[9px] font-mono text-[#9ca98b]">+20 XP</span>
+            </div>
+
+          </div>
+
+          <!-- CREATE TASK FORM -->
+          <form onsubmit="addTask(event)" class="flex gap-2 pt-2 border-t border-white/10">
+            <input type="text" id="new-task-input" placeholder="+ Nuova Task Google..." class="flex-1 bg-[#1e1333] border border-white/10 text-white text-xs rounded-xl px-3 py-2 focus:outline-none focus:border-[#9ca98b]">
+            <button type="submit" class="p-2 rounded-xl bg-[#9ca98b] hover:bg-[#9ca98b]/80 text-[#1e1333] font-bold transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- CARD 4: GOOGLE ACCOUNT MASTER CARD -->
+        <div class="dashboard-card bg-[#833d6f]/40 border-[#9a85c0]/40 flex flex-col justify-between text-white">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="font-heading font-bold text-xl text-[#efdebd]">
+                Google Workspace
+              </h2>
+              <span class="text-xs font-mono font-bold px-3 py-1 rounded-full border bg-[#9ca98b]/30 text-[#9ca98b] border-[#9ca98b]/50">
+                Connesso
+              </span>
+            </div>
+
+            <div class="flex flex-col gap-2 font-mono text-xs text-white/90">
+              <div class="p-3.5 bg-[#1e1333]/80 rounded-2xl border border-white/10">
+                <p class="font-bold text-[#efdebd] text-[11px] uppercase tracking-wider">Account Attivo:</p>
+                <p class="text-white text-sm font-semibold truncate mt-0.5">clark.kent@gmail.com</p>
+              </div>
+              <p class="mt-3 text-[11px] leading-relaxed text-[#a8c6de] font-sans">
+                Sincronizzazione in tempo reale di Google Calendar API v3 e Google Tasks API. Token OAuth2 aggiornato automaticamente.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <button onclick="alert('Disconnessione account simulata');" class="action-pill bg-white/10 hover:bg-white/20 text-white w-full justify-center border border-white/10">
+              <span>Disconnetti Account</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INTERACTIVE MOCKUP JAVASCRIPT -->
+  <script>
+    function switchView(mode) {
+      const tenDaysBtn = document.getElementById('btn-ten-days');
+      const todayBtn = document.getElementById('btn-today');
+      const tenDaysCard = document.getElementById('ten-days-card');
+      const todayCard = document.getElementById('today-card');
+
+      if (mode === 'tenDays') {
+        tenDaysBtn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all bg-[#9a85c0] text-white shadow-md";
+        todayBtn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all text-white/70 hover:text-white";
+        tenDaysCard.classList.remove('hidden');
+        todayCard.classList.add('hidden');
+      } else {
+        todayBtn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all bg-[#9a85c0] text-white shadow-md";
+        tenDaysBtn.className = "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all text-white/70 hover:text-white";
+        todayCard.classList.remove('hidden');
+        tenDaysCard.classList.add('hidden');
+      }
+    }
+
+    function openDayDetail(dayName, events) {
+      const drawer = document.getElementById('day-detail-drawer');
+      const title = document.getElementById('drawer-title');
+      const list = document.getElementById('drawer-events-list');
+
+      title.textContent = "Programma per: " + dayName;
+      if (events.length === 0) {
+        list.innerHTML = `<p class="text-xs font-mono text-white/50 py-2">Nessun evento in programma per questa data.</p>`;
+      } else {
+        list.innerHTML = events.map(ev => `
+          <div class="p-2.5 rounded-xl bg-[#1e1333] border border-white/10 text-xs flex justify-between items-center">
+            <span class="font-bold text-white">${ev}</span>
+            <span class="text-[10px] font-mono text-[#9a85c0]">Google Calendar</span>
+          </div>
+        `).join('');
+      }
+
+      drawer.classList.remove('hidden');
+    }
+
+    function closeDayDetail() {
+      document.getElementById('day-detail-drawer').classList.add('hidden');
+    }
+
+    function toggleTask(checkbox) {
+      const countEl = document.getElementById('task-count');
+      let current = parseInt(countEl.textContent);
+      if (checkbox.checked) {
+        countEl.textContent = Math.max(0, current - 1);
+      } else {
+        countEl.textContent = current + 1;
+      }
+    }
+
+    function addTask(e) {
+      e.preventDefault();
+      const input = document.getElementById('new-task-input');
+      if (!input.value.trim()) return;
+      alert('Task "' + input.value + '" creata (+10 XP)');
+      input.value = '';
+    }
+  </script>
+</body>
+</html>

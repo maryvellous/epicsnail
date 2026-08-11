@@ -26,64 +26,96 @@ export function GamificationCard({
         </button>
       </div>
 
-      {/* Difficulty Selector */}
-      <div className="flex flex-col gap-2">
-        <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider">
-          Difficilita di Progressione Livelli
-        </label>
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { id: 'easy', label: 'Facile (0.7x)', desc: 'Progressione rapida' },
-            { id: 'normal', label: 'Normale (1.0x)', desc: 'Bilanciamento standard' },
-            { id: 'hard', label: 'Difficile (1.5x)', desc: 'Per veri pro' },
-          ].map((d) => (
-            <button
-              key={d.id}
-              onClick={() => updateDifficulty(d.id)}
-              className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
-                difficulty === d.id
-                  ? 'bg-plum border-sand shadow-lg text-white font-bold'
-                  : 'bg-canvas border-white/10 text-white/70 hover:border-white/30'
-              }`}
-            >
-              <p className="text-xs font-bold text-white">{d.label}</p>
-              <span className="text-[10px] text-blue font-mono block mt-0.5">{d.desc}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Action XP Rules Grid */}
-      <div className="flex flex-col gap-3 pt-2">
-        <label className="text-xs font-mono font-bold text-lavender uppercase tracking-wider">
-          Punti XP Assegnati per Azione
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { key: 'taskComplete', label: 'Task Post-it completata' },
-            { key: 'taskCreate', label: 'Creazione nuova task' },
-            { key: 'calendarEvent', label: 'Evento Google Calendar' },
-            { key: 'aiChat', label: 'Interazione con Chatbot AI' },
-            { key: 'spotifySession', label: 'Sessione musica Spotify' },
-            { key: 'dailyStreak', label: 'Accesso quotidiano (Streak)' },
-          ].map((rule) => (
-            <div key={rule.key} className="p-3 bg-canvas rounded-2xl border border-lavender/30 flex items-center justify-between shadow-inner">
-              <span className="text-xs font-bold text-white">
-                {rule.label}
-              </span>
-              <div className="flex items-center gap-1.5">
-                <input
-                  type="number"
-                  min="1"
-                  max="200"
-                  value={xpRules[rule.key] || 0}
-                  onChange={(e) => updateXpRules({ [rule.key]: parseInt(e.target.value) || 1 })}
-                  className="w-16 bg-card border border-sand/50 text-center text-xs font-mono font-bold text-sand rounded-xl px-2 py-1 focus:outline-none focus:border-sand"
-                />
-                <span className="text-[10px] font-mono text-blue">XP</span>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* CARD 1: DIFFICULTY SELECTOR */}
+        <div className="bg-canvas p-5 rounded-2xl border border-plum/40 flex flex-col justify-between gap-3">
+          <div>
+            <label className="text-xs font-mono font-bold text-sand uppercase tracking-wider block mb-3">
+              1. Difficilita Livelli
+            </label>
+            <div className="flex flex-col gap-2">
+              {[
+                { id: 'easy', label: 'Facile (0.7x)', desc: 'Progressione rapida' },
+                { id: 'normal', label: 'Normale (1.0x)', desc: 'Standard' },
+                { id: 'hard', label: 'Difficile (1.5x)', desc: 'Per veri pro' },
+              ].map((d) => (
+                <button
+                  key={d.id}
+                  onClick={() => updateDifficulty(d.id)}
+                  className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    difficulty === d.id
+                      ? 'bg-plum border-sand shadow-lg text-white font-bold'
+                      : 'bg-card border-white/10 text-white/70 hover:border-white/30'
+                  }`}
+                >
+                  <p className="text-xs font-bold text-white">{d.label}</p>
+                  <span className="text-[9px] text-blue font-mono block">{d.desc}</span>
+                </button>
+              ))}
             </div>
-          ))}
+          </div>
+        </div>
+
+        {/* CARD 2: XP RULES PART 1 */}
+        <div className="bg-canvas p-5 rounded-2xl border border-plum/40 flex flex-col justify-between gap-3">
+          <div>
+            <label className="text-xs font-mono font-bold text-lavender uppercase tracking-wider block mb-3">
+              2. XP Produttivita
+            </label>
+            <div className="flex flex-col gap-2.5">
+              {[
+                { key: 'taskComplete', label: 'Task Post-it completata' },
+                { key: 'taskCreate', label: 'Creazione nuova task' },
+                { key: 'calendarEvent', label: 'Evento Google Calendar' },
+              ].map((rule) => (
+                <div key={rule.key} className="p-2.5 bg-card rounded-xl border border-lavender/20 flex items-center justify-between">
+                  <span className="text-xs font-bold text-white truncate mr-2">{rule.label}</span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <input
+                      type="number"
+                      min="1"
+                      max="200"
+                      value={xpRules[rule.key] || 0}
+                      onChange={(e) => updateXpRules({ [rule.key]: parseInt(e.target.value) || 1 })}
+                      className="w-14 bg-canvas border border-sand/50 text-center text-xs font-mono font-bold text-sand rounded-lg px-1.5 py-0.5 focus:outline-none focus:border-sand"
+                    />
+                    <span className="text-[9px] font-mono text-blue">XP</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* CARD 3: XP RULES PART 2 */}
+        <div className="bg-canvas p-5 rounded-2xl border border-plum/40 flex flex-col justify-between gap-3">
+          <div>
+            <label className="text-xs font-mono font-bold text-lavender uppercase tracking-wider block mb-3">
+              3. XP Interaction & Daily
+            </label>
+            <div className="flex flex-col gap-2.5">
+              {[
+                { key: 'aiChat', label: 'Interazione Chatbot AI' },
+                { key: 'spotifySession', label: 'Sessione musica Spotify' },
+                { key: 'dailyStreak', label: 'Streak accesso giornaliero' },
+              ].map((rule) => (
+                <div key={rule.key} className="p-2.5 bg-card rounded-xl border border-lavender/20 flex items-center justify-between">
+                  <span className="text-xs font-bold text-white truncate mr-2">{rule.label}</span>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <input
+                      type="number"
+                      min="1"
+                      max="200"
+                      value={xpRules[rule.key] || 0}
+                      onChange={(e) => updateXpRules({ [rule.key]: parseInt(e.target.value) || 1 })}
+                      className="w-14 bg-canvas border border-sand/50 text-center text-xs font-mono font-bold text-sand rounded-lg px-1.5 py-0.5 focus:outline-none focus:border-sand"
+                    />
+                    <span className="text-[9px] font-mono text-blue">XP</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
