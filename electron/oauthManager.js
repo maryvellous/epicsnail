@@ -38,89 +38,142 @@ class OAuthManager {
     ];
 
     return new Promise((resolve) => {
-      let isResolved = false;
+      let isFinalized = false;
+      let timeoutTimer = null;
+      let server = null;
+
+      // Single, idempotent transaction finalizer
+      const finalizeTransaction = (result) => {
+        if (isFinalized) return;
+        isFinalized = true;
+
+        if (timeoutTimer) {
+          clearTimeout(timeoutTimer);
+          timeoutTimer = null;
+        }
+
+        if (server) {
+          try {
+            server.close();
+          } catch (_) {
+            // Ignore if already closing/closed
+          }
+        }
+
+        resolve(result);
+      };
 
       // Start local loopback HTTP server on an available port
-      const server = http.createServer(async (req, res) => {
+      server = http.createServer(async (req, res) => {
         try {
           const reqUrl = new URL(req.url, `http://127.0.0.1`);
+
+          // 1. Path & Method Filter: strictly accept GET /oauth/callback
+          if (req.method !== 'GET' || reqUrl.pathname !== '/oauth/callback') {
+            if (!res.headersSent) {
+              res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+              res.end('Not Found');
+            }
+            return; // Completely ignore foreign HTTP requests without affecting OAuth transaction
+          }
+
+          // If transaction has already been finalized (e.g. duplicate callback), respond gracefully
+          if (isFinalized) {
+            if (!res.headersSent) {
+              res.writeHead(410, { 'Content-Type': 'text/plain; charset=utf-8' });
+              res.end('Sessione OAuth gia completata o scaduta.');
+            }
+            return;
+          }
+
           const code = reqUrl.searchParams.get('code');
           const errorParam = reqUrl.searchParams.get('error');
           const incomingState = reqUrl.searchParams.get('state');
 
+          // 2. Explicit handling of error returned by Google
           if (errorParam) {
-            clearTimeout(timeoutTimer);
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end('<h2>Autenticazione annullata o fallita. Puoi chiudere questa pagina.</h2>');
-            server.close();
-            if (!isResolved) { isResolved = true; resolve({ success: false, error: `Google OAuth error: ${errorParam}` }); }
+            if (!res.headersSent) {
+              res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+              res.end('<h2>Autenticazione annullata o fallita. Puoi chiudere questa pagina.</h2>');
+            }
+            finalizeTransaction({ success: false, error: `Google OAuth error: ${errorParam}` });
             return;
           }
 
-          if (incomingState !== stateToken) {
-            clearTimeout(timeoutTimer);
-            res.writeHead(403, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end('<h2>Errore di sicurezza: State CSRF non valido.</h2>');
-            server.close();
-            if (!isResolved) { isResolved = true; resolve({ success: false, error: 'Stato CSRF OAuth non valido o manomesso.' }); }
+          // 3. State CSRF validation (only checked AFTER confirming path is /oauth/callback)
+          if (!incomingState || incomingState !== stateToken) {
+            if (!res.headersSent) {
+              res.writeHead(403, { 'Content-Type': 'text/html; charset=utf-8' });
+              res.end('<h2>Errore di sicurezza: State CSRF non valido.</h2>');
+            }
+            finalizeTransaction({ success: false, error: 'Stato CSRF OAuth non valido o manomesso.' });
             return;
           }
 
-          if (code) {
-            clearTimeout(timeoutTimer);
-            // Success feedback page
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-            res.end(`
-              <!DOCTYPE html>
-              <html>
-              <head><title>Diaspro Viboard - Autenticazione Completata</title></head>
-              <body style="font-family: system-ui, -apple-system, sans-serif; background: #1e1333; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
-                <div style="text-align: center; background: #2b1c47; padding: 40px; border-radius: 20px; border: 1px solid #9D85C6; max-width: 420px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-                  <h1 style="color: #9D85C6; margin-bottom: 12px; font-size: 24px;">Autenticazione Completata</h1>
-                  <p style="color: #E8D19E; font-size: 15px; margin-bottom: 16px;">L'account Google Workspace e collegato a Diaspro Viboard.</p>
-                  <p style="color: #A5C4DC; font-size: 13px;">Puoi chiudere questa scheda e tornare all'applicazione.</p>
-                </div>
-              </body>
-              </html>
-            `);
-
-            server.close();
-
-            // Exchange Authorization Code for Tokens
-            const redirectUri = `http://127.0.0.1:${server.address().port}`;
-            const tokenResult = await OAuthManager.exchangeGoogleCode({
-              code,
-              verifier,
-              clientId,
-              clientSecret,
-              redirectUri,
-            });
-
-            if (!isResolved) { isResolved = true; resolve(tokenResult); }
+          // 4. Validate Code presence
+          if (!code) {
+            if (!res.headersSent) {
+              res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' });
+              res.end('<h2>Errore: Codice di autorizzazione non presente.</h2>');
+            }
+            finalizeTransaction({ success: false, error: 'Codice di autorizzazione non presente nel callback.' });
             return;
+          }
+
+          // 5. Exchange Code for Tokens BEFORE sending HTML response to browser
+          const port = server.address().port;
+          const redirectUri = `http://127.0.0.1:${port}/oauth/callback`;
+          const tokenResult = await OAuthManager.exchangeGoogleCode({
+            code,
+            verifier,
+            clientId,
+            clientSecret,
+            redirectUri,
+          });
+
+          // 6. Send definitive HTML response and finalize transaction
+          if (tokenResult.success) {
+            if (!res.headersSent) {
+              res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+              res.end(`
+                <!DOCTYPE html>
+                <html>
+                <head><title>Diaspro Viboard - Autenticazione Completata</title></head>
+                <body style="font-family: system-ui, -apple-system, sans-serif; background: #1e1333; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+                  <div style="text-align: center; background: #2b1c47; padding: 40px; border-radius: 20px; border: 1px solid #9D85C6; max-width: 420px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+                    <h1 style="color: #9D85C6; margin-bottom: 12px; font-size: 24px;">Autenticazione Completata</h1>
+                    <p style="color: #E8D19E; font-size: 15px; margin-bottom: 16px;">L'account Google Workspace e collegato a Diaspro Viboard.</p>
+                    <p style="color: #A5C4DC; font-size: 13px;">Puoi chiudere questa scheda e tornare all'applicazione.</p>
+                  </div>
+                </body>
+                </html>
+              `);
+            }
+            finalizeTransaction(tokenResult);
+          } else {
+            if (!res.headersSent) {
+              res.writeHead(400, { 'Content-Type': 'text/html; charset=utf-8' });
+              res.end('<h2>Errore durante l\'autenticazione. Puoi chiudere questa scheda e riprovare nell\'applicazione.</h2>');
+            }
+            finalizeTransaction(tokenResult);
           }
         } catch (e) {
-          clearTimeout(timeoutTimer);
-          res.writeHead(500, { 'Content-Type': 'text/plain' });
-          res.end('Errore durante la gestione del callback OAuth');
-          server.close();
-          if (!isResolved) { isResolved = true; resolve({ success: false, error: e.message }); }
-          return;
+          if (!res.headersSent) {
+            res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+            res.end('Errore interno durante il callback OAuth.');
+          }
+          finalizeTransaction({ success: false, error: e.message });
         }
       });
 
       // 3-minute timeout to close inactive server
-      const timeoutTimer = setTimeout(() => {
-        if (!isResolved) {
-          isResolved = true;
-          server.close();
-          resolve({ success: false, error: 'Timeout autenticazione: l\'operazione e scaduta (3 minuti).' });
-        }
+      timeoutTimer = setTimeout(() => {
+        finalizeTransaction({ success: false, error: 'Timeout autenticazione: l\'operazione e scaduta (3 minuti).' });
       }, 180000);
 
       server.listen(0, '127.0.0.1', () => {
         const port = server.address().port;
-        const redirectUri = `http://127.0.0.1:${port}`;
+        const redirectUri = `http://127.0.0.1:${port}/oauth/callback`;
 
         const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
           `client_id=${encodeURIComponent(clientId)}` +
@@ -138,8 +191,7 @@ class OAuthManager {
       });
 
       server.on('error', (err) => {
-        clearTimeout(timeoutTimer);
-        if (!isResolved) { isResolved = true; resolve({ success: false, error: `Errore avvio server OAuth locale: ${err.message}` }); }
+        finalizeTransaction({ success: false, error: `Errore avvio server OAuth locale: ${err.message}` });
       });
     });
   }

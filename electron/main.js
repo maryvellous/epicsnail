@@ -34,7 +34,9 @@ const PinterestTools = require('./pinterestTools');
 const AIEngine = require('./aiEngine');
 const { scanDirectoryForGitRepos, getGitProjectDetails, executeGitAction } = require('./gitScanner');
 const { openTerminal, openVSCode, openAndroidStudio, openAntigravityIDE, openInExplorer } = require('./systemOps');
+const { registerAllIPC } = require('./ipc');
 
+// Initialize shared instances and tools
 const store = new LocalStore();
 const authVault = new AuthVault();
 const githubTools = new GitHubTools(authVault);
@@ -42,6 +44,24 @@ const googleTools = new GoogleTools(authVault);
 const spotifyTools = new SpotifyTools(authVault);
 const pinterestTools = new PinterestTools(authVault);
 const aiEngine = new AIEngine(authVault, store, githubTools, googleTools, spotifyTools);
+
+// Register domain IPC handlers
+registerAllIPC(ipcMain, {
+  store,
+  authVault,
+  githubTools,
+  googleTools,
+  spotifyTools,
+  pinterestTools,
+  aiEngine,
+  OAuthManager,
+  scanDirectoryForGitRepos,
+  getGitProjectDetails,
+  executeGitAction,
+  systemOps: { openTerminal, openVSCode, openAndroidStudio, openAntigravityIDE, openInExplorer },
+  shell,
+  appRoot: path.resolve(__dirname, '..'),
+});
 
 let mainWindow = null;
 
@@ -104,289 +124,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-
-// IPC Handlers
-ipcMain.handle('git:scan', async (event, rootPaths) => {
-  const pathsToScan = rootPaths && rootPaths.length > 0 ? rootPaths : store.get('scanPaths');
-  let allRepos = [];
-  for (const rootPath of pathsToScan) {
-    try {
-      const repos = await scanDirectoryForGitRepos(rootPath, 3);
-      allRepos.push(...repos);
-    } catch (e) {
-      console.error('Scan error on path:', rootPath, e);
-    }
-  }
-
-  const currentWorkspace = path.resolve(__dirname, '..');
-  const hasCurrent = allRepos.some(r => r.path === currentWorkspace);
-  if (!hasCurrent) {
-    const currentRepo = await getGitProjectDetails(currentWorkspace);
-    if (currentRepo) allRepos.unshift(currentRepo);
-  }
-
-  return allRepos;
-});
-
-ipcMain.handle('git:details', async (event, folderPath) => {
-  return await getGitProjectDetails(folderPath);
-});
-
-ipcMain.handle('git:action', async (event, { folderPath, action, options }) => {
-  return await executeGitAction(folderPath, action, options);
-});
-
-ipcMain.handle('system:open-terminal', async (event, folderPath) => {
-  return await openTerminal(folderPath);
-});
-
-ipcMain.handle('system:open-vscode', async (event, folderPath) => {
-  return await openVSCode(folderPath);
-});
-
-ipcMain.handle('system:open-studio', async (event, folderPath) => {
-  return await openAndroidStudio(folderPath);
-});
-
-ipcMain.handle('system:open-antigravity', async (event, folderPath) => {
-  return await openAntigravityIDE(folderPath);
-});
-
-ipcMain.handle('system:open-explorer', async (event, folderPath) => {
-  return await openInExplorer(folderPath);
-});
-
-ipcMain.handle('system:open-external', async (event, url) => {
-  if (url) shell.openExternal(url);
-});
-
-ipcMain.handle('store:get-all', async () => {
-  return store.data;
-});
-
-ipcMain.handle('store:set', async (event, { key, val }) => {
-  return store.set(key, val);
-});
-
-// Auth & Vault IPC Handlers
-ipcMain.handle('auth:save-token', async (event, { service, token }) => {
-  return authVault.saveToken(service, token);
-});
-
-ipcMain.handle('auth:get-token', async (event, service) => {
-  return authVault.getToken(service);
-});
-
-ipcMain.handle('auth:has-token', async (event, service) => {
-  return authVault.hasToken(service);
-});
-
-ipcMain.handle('auth:remove-token', async (event, service) => {
-  return authVault.removeToken(service);
-});
-
-// GitHub Integration IPC Handlers
-ipcMain.handle('github:validate', async (event, token) => {
-  return await githubTools.validateToken(token);
-});
-
-ipcMain.handle('github:get-repos', async () => {
-  return await githubTools.getRepos();
-});
-
-ipcMain.handle('github:get-issues', async () => {
-  return await githubTools.getIssues();
-});
-
-// Google Integration IPC Handlers
-ipcMain.handle('google:start-oauth', async () => {
-  const clientId = googleTools.getClientId();
-  const clientSecret = googleTools.getClientSecret();
-  const oauthResult = await OAuthManager.startGoogleOAuth({ clientId, clientSecret });
-  if (oauthResult.success && oauthResult.tokens) {
-    authVault.saveToken('google_tokens', oauthResult.tokens);
-  }
-  return oauthResult;
-});
-
-ipcMain.handle('google:get-status', async () => {
-  return await googleTools.getConnectionStatus();
-});
-
-ipcMain.handle('google:disconnect', async () => {
-  return await googleTools.disconnect();
-});
-
-ipcMain.handle('google:get-events', async (event, maxResults) => {
-  return await googleTools.getCalendarEvents(maxResults);
-});
-
-ipcMain.handle('google:create-event', async (event, eventData) => {
-  return await googleTools.createCalendarEvent(eventData);
-});
-
-ipcMain.handle('google:get-tasks', async () => {
-  return await googleTools.getGoogleTasks();
-});
-
-ipcMain.handle('google:toggle-task', async (event, { taskId, completed }) => {
-  return await googleTools.toggleGoogleTask(taskId, completed);
-});
-
-ipcMain.handle('google:create-task', async (event, { title, due }) => {
-  return await googleTools.createGoogleTask(title, due);
-});
-
-ipcMain.handle('google:get-drive-files', async (event, pageSize) => {
-  return await googleTools.getDriveFiles(pageSize);
-});
-
-
-ipcMain.handle('google:delete-event', async (event, eventId) => {
-  return await googleTools.deleteCalendarEvent(eventId);
-});
-
-ipcMain.handle('google:postpone-task', async (event, taskId) => {
-  return await googleTools.postponeTaskToTomorrow(taskId);
-});
-
-// Spotify Integration IPC Handlers
-ipcMain.handle('spotify:start-oauth', async () => {
-  return await spotifyTools.startSpotifyOAuth();
-});
-
-ipcMain.handle('spotify:get-status', async () => {
-  return await spotifyTools.getConnectionStatus();
-});
-
-ipcMain.handle('spotify:disconnect', async () => {
-  return authVault.removeToken('spotify_tokens');
-});
-
-ipcMain.handle('spotify:get-playback', async () => {
-  return await spotifyTools.getPlaybackState();
-});
-
-ipcMain.handle('spotify:play', async () => {
-  return await spotifyTools.play();
-});
-
-ipcMain.handle('spotify:pause', async () => {
-  return await spotifyTools.pause();
-});
-
-ipcMain.handle('spotify:next', async () => {
-  return await spotifyTools.next();
-});
-
-ipcMain.handle('spotify:previous', async () => {
-  return await spotifyTools.previous();
-});
-
-ipcMain.handle('spotify:seek', async (event, positionMs) => {
-  return await spotifyTools.seek(positionMs);
-});
-
-// Pinterest Integration IPC Handlers
-ipcMain.handle('pinterest:start-oauth', async () => {
-  return await pinterestTools.startPinterestOAuth();
-});
-
-ipcMain.handle('pinterest:get-status', async () => {
-  return await pinterestTools.getConnectionStatus();
-});
-
-ipcMain.handle('pinterest:disconnect', async () => {
-  return authVault.removeToken('pinterest_tokens');
-});
-
-ipcMain.handle('pinterest:get-boards', async () => {
-  return await pinterestTools.getPinterestBoards();
-});
-
-ipcMain.handle('pinterest:get-pins', async (event, { boardId, bookmark }) => {
-  return await pinterestTools.getPinterestPins(boardId, bookmark);
-});
-
-
-
-// AI API Key Test IPC Handler
-ipcMain.handle('ai:test-key', async (event, { provider, apiKey }) => {
-  const keyToTest = apiKey || authVault.getToken(`${provider}_api_key`);
-  
-  if (provider === 'ollama') {
-    try {
-      const res = await fetch('http://localhost:11434/api/tags');
-      if (res.ok) return { success: true, message: 'Ollama locale raggiungibile!' };
-      return { success: false, error: 'Ollama non risponde su http://localhost:11434' };
-    } catch (e) {
-      return { success: false, error: 'Ollama non in esecuzione in locale' };
-    }
-  }
-
-  if (!keyToTest) return { success: false, error: 'Chiave API non fornita' };
-
-  try {
-    if (provider === 'gemini') {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${keyToTest}`);
-      if (res.ok) return { success: true, message: 'Chiave Gemini API valida!' };
-      const err = await res.json();
-      return { success: false, error: err.error?.message || 'Chiave non valida' };
-    }
-
-    if (provider === 'anthropic') {
-      const res = await fetch('https://api.anthropic.com/v1/models', {
-        headers: {
-          'x-api-key': keyToTest,
-          'anthropic-version': '2023-06-01',
-        },
-      });
-      if (res.ok) return { success: true, message: 'Chiave Anthropic Claude valida!' };
-      const err = await res.json().catch(() => ({}));
-      return { success: false, error: `[HTTP ${res.status}] ${err.error?.message || err.message || JSON.stringify(err)}` };
-    }
-
-    if (provider === 'deepseek') {
-      const res = await fetch('https://api.deepseek.com/models', {
-        headers: { Authorization: `Bearer ${keyToTest}` },
-      });
-      if (res.ok) return { success: true, message: 'Chiave DeepSeek API valida!' };
-      const err = await res.json();
-      return { success: false, error: err.error?.message || 'Chiave DeepSeek non valida' };
-    }
-
-    if (provider === 'openai') {
-      const res = await fetch('https://api.openai.com/v1/models', {
-        headers: { Authorization: `Bearer ${keyToTest}` },
-      });
-      if (res.ok) return { success: true, message: 'Chiave OpenAI valida!' };
-      const err = await res.json();
-      return { success: false, error: err.error?.message || 'Chiave OpenAI non valida' };
-    }
-
-    return { success: false, error: 'Provider sconosciuto' };
-  } catch (e) {
-    return { success: false, error: e.message };
-  }
-});
-
-// Chat & Context IPC Handlers
-ipcMain.handle('api:chat-message', async (event, data) => {
-  return await aiEngine.handleChatMessage(data);
-});
-
-ipcMain.handle('api:execute-tool', async (event, { toolName, params }) => {
-  return await aiEngine.executeTool(toolName, params);
-});
-
-ipcMain.handle('api:get-context', async () => {
-  return aiEngine.getContextHeader();
-});
-
-ipcMain.handle('api:save-context', async (event, contextHeader) => {
-  return aiEngine.saveContextHeader(contextHeader);
-});
-
-
-
-
